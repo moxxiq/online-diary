@@ -19,6 +19,11 @@ Tip: to rebuild only 1 service you need to
 docker-compose -f docker-compose-local.yaml up --detach --build {service-name}
 ```
 
+### To run tests execute
+``` bash
+docker-compose -f docker-compose-local.yaml exec backend pytest
+```
+
 # TODO: Gitlab readme template fill
 ## Getting started
 
