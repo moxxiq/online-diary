@@ -9,6 +9,6 @@ services:
     volumes:
       - ./services/backend/:/backend/
     ports:
-      - 8002:8000
+      - "8002:8000"
     env_file:
       - .local.env
