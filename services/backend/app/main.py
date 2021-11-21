@@ -6,19 +6,17 @@ from app.db import engine, database, metadata
 metadata.create_all(engine)
 
 app = FastAPI()
-v1 = FastAPI()
 
-@v1.on_event("startup")
+
+@app.on_event("startup")
 async def startup():
     await database.connect()
 
 
-@v1.on_event("shutdown")
+@app.on_event("shutdown")
 async def shutdown():
     await database.disconnect()
 
 
-v1.include_router(ping.router)
-v1.include_router(notes.router, prefix="/notes", tags=["notes"])
-
-app.mount("/api/v1", v1)
+app.include_router(ping.router)
+app.include_router(notes.router, prefix="/notes", tags=["notes"])
