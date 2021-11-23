@@ -1,14 +1,14 @@
 from fastapi import APIRouter, HTTPException, Path
 
-from app.api import crud
-from app.api.models import NoteDB, NoteSchema
+import app.core.crud as crud
+from app.core.schemas.notes import NoteDB, NoteSchema
 
 router = APIRouter()
 
 
 @router.post("/", response_model=NoteDB, status_code=201)
 async def create_note(payload: NoteSchema):
-    note_id = await crud.post(payload)
+    note_id = await crud.notes.post(payload)
 
     response_object = {
         "id": note_id,
@@ -19,7 +19,7 @@ async def create_note(payload: NoteSchema):
 
 @router.get("/{id}/", response_model=NoteDB)
 async def read_note(id: int = Path(..., gt=0),):
-    note = await crud.get(id)
+    note = await crud.notes.get(id)
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
     return note
@@ -27,15 +27,15 @@ async def read_note(id: int = Path(..., gt=0),):
 
 @router.get("/", response_model=list[NoteDB])
 async def read_all_notes():
-    return await crud.get_all()
+    return await crud.notes.get_all()
 
 @router.put("/{id}/", response_model=NoteDB)
 async def update_note(payload: NoteSchema, id: int = Path(..., gt=0),):
-    note = await crud.get(id)
+    note = await crud.notes.get(id)
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
 
-    note_id = await crud.put(id, payload)
+    note_id = await crud.notes.put(id, payload)
 
     response_object = {
         "id": note_id,
@@ -47,11 +47,11 @@ async def update_note(payload: NoteSchema, id: int = Path(..., gt=0),):
 
 @router.delete("/{id}/", response_model=NoteDB)
 async def delete_note(id: int = Path(..., gt=0)):
-    note = await crud.get(id)
+    note = await crud.notes.get(id)
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
 
-    await crud.delete(id)
+    await crud.notes.delete(id)
 
     return note
 

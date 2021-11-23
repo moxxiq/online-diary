@@ -1,8 +1,8 @@
 from starlette.testclient import TestClient
 
-from app.main import app
+from app.main import v1
 
-client = TestClient(app)
+client = TestClient(v1)
 
 
 def test_ping():
