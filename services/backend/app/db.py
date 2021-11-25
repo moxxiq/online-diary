@@ -1,6 +1,8 @@
 import enum
 from decouple import config
 
+from app.core.schemas.users import UserType
+
 from sqlalchemy import (
     Column,
     DateTime,
@@ -18,12 +20,6 @@ from sqlalchemy.sql import func
 from databases import Database
 
 DATABASE_URL = config('DATABASE_URL')
-
-# Custom types
-class UserType(enum.Enum):
-    administration = 1
-    teacher = 2
-    student = 3
 
 # SQLAlchemy
 engine = create_engine(DATABASE_URL)

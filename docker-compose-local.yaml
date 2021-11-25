@@ -13,6 +13,8 @@ services:
       - 8002:8000
     environment:
       - DATABASE_URL=postgresql://fastapi:fastapi@db/fastapi_dev
+      - SECRET_KEY=de9d641c1d6ae7ef29c8f94baa60dc0c580964f6804ff137bc6ace5d63e0f3e5
+      - ALGORITHM=HS256
   db:
     image: postgres:14-bullseye
     volumes:
