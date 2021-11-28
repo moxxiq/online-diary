@@ -1,9 +1,7 @@
 from fastapi import FastAPI
 
 from app.api.v1.endpoints import all as v1_endpoints
-from app.db import engine, database, metadata
-
-metadata.create_all(engine)
+from app.db import database
 
 app = FastAPI()
 v1 = FastAPI()
