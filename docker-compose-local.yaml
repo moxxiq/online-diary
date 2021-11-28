@@ -25,6 +25,16 @@ services:
       - POSTGRES_USER=fastapi
       - POSTGRES_PASSWORD=fastapi
       - POSTGRES_DB=fastapi_dev
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.admin
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMINPORT=8081
+    ports:
+      - "8081:80"
+    profiles:
+      - donotstart
 volumes:
   postgres_data:
     name: postgres_data
