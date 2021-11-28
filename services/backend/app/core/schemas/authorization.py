@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Optional
 
 from pydantic import BaseModel, Field, EmailStr
 
@@ -9,8 +10,8 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    email: EmailStr
-    scopes: list[str] | None
+    username: str
+    scopes: Optional[list[str]]
 
 class TokenStatus(BaseModel):
     #  Sending status messages back to the end user
