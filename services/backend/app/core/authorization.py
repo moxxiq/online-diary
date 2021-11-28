@@ -26,7 +26,7 @@ async def authenticate_user(email: str, password: str):
     user = await crud.users.get_by_email(email)
     if not user:
         return False
-    if not verify_password(password, user.password):
+    if not verify_password(password, user.get("hashed_password")):
         return False
     return user
 
@@ -48,10 +48,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        print(f"{payload = }")
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
         token_data = TokenData(username=username)
+        print(f"{token_data = }")
     except JWTError:
         raise credentials_exception
     user = await crud.users.get_by_email(token_data.username)
