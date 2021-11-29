@@ -1,5 +1,7 @@
-from app.core.schemas.users import UserSchema
-from app.db import users, database
+from app.core.schemas.users import User
+from app.db import database
+from app.core.models.users import users
+from app.core.authorization import get_password_hash
 
 async def get(id: int):
     query = users.select().where(id == users.c.id)
@@ -8,3 +10,15 @@ async def get(id: int):
 async def get_by_email(email: str):
     query = users.select().where(email == users.c.email)
     return await database.fetch_one(query=query)
+
+async def post(payload: User):
+    query = users.insert().values(
+        email=payload.email,
+        hashed_password=get_password_hash(payload.password),
+        type=payload.type,
+        name=payload.name,
+        surname=payload.surname,
+        midname=payload.midname,
+        birthday=payload.birthday,
+    )
+    return await database.execute(query=query)

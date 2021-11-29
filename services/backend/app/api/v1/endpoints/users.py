@@ -2,11 +2,17 @@ from fastapi import APIRouter, HTTPException, Path, Depends
 
 import app.core.crud as crud
 from app.core.authorization import get_current_user
-from app.core.schemas.users import UserSchema
+from app.core.schemas.users import User, UserInDB
 
 router = APIRouter()
 
 
-@router.post("/me", response_model=UserSchema)
-async def read_users_me(current_user: UserSchema = Depends(get_current_user)):
+@router.get("/me", response_model=UserInDB)
+async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+@router.post("/", response_model=UserInDB, status_code=201)
+async def create_user(payload: User):
+    user_id = await crud.users.post(payload)
+    response_object = await crud.users.get(user_id)
+    return response_object
