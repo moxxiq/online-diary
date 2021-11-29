@@ -11,7 +11,7 @@ cd online-diary
 ### Step 2. Run all services via:
 
 ``` bash
-docker-compose -f docker-compose-local.yaml --env-file .local.env up --build
+docker-compose -f docker-compose-local.yaml up --build
 ```
 
 Tip: to rebuild only 1 service you need to
