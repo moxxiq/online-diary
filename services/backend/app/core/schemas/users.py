@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field, EmailStr
 
 class User(BaseModel):
     email: EmailStr = Field(...)
-    type: str = Field(...)
+    type: int = Field(...)
     name: str = Field(...)
     surname: str = Field(...)
     midname: str = Field(...)
