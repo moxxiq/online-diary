@@ -1,4 +1,4 @@
-from app.core.schemas.users import User
+from app.core.schemas.users import NewUser
 from app.db import database
 from app.core.models.users import users
 from app.core.authorization import get_password_hash
@@ -11,7 +11,7 @@ async def get_by_email(email: str):
     query = users.select().where(email == users.c.email)
     return await database.fetch_one(query=query)
 
-async def post(payload: User):
+async def post(payload: NewUser):
     query = users.insert().values(
         email=payload.email,
         hashed_password=get_password_hash(payload.password),

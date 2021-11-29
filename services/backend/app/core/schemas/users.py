@@ -11,6 +11,9 @@ class User(BaseModel):
     midname: str = Field(...)
     birthday: date = Field(...)
 
+class NewUser(User):
+    password: str = Field(...)
+
 class UserInDB(User):
     id: int = Field(...)
     hashed_password: str = Field(...)

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from app.api.v1.endpoints import all as v1_endpoints
 from app.db import database
+from app.misc.utils import create_admin_if_not_exists
 
 app = FastAPI()
 v1 = FastAPI()
@@ -9,6 +10,7 @@ v1 = FastAPI()
 @app.on_event("startup")
 async def startup():
     await database.connect()
+    await create_admin_if_not_exists()
 
 
 @app.on_event("shutdown")
