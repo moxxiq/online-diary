@@ -11,7 +11,7 @@ from app.core.schemas.authorization import TokenData
 
 SECRET_KEY = config('SECRET_KEY')
 ALGORITHM = config('ALGORITHM')
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 10080 # or 30 with refresh token
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
