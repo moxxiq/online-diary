@@ -3,26 +3,42 @@
 ## How to run locally
 ### Step 1. Clone the repository with:
 
-``` bash
+```bash
 git clone git@gitlab.com:MathApe/online-diary.git
 cd online-diary
 ```
 
 ### Step 2. Run all services via:
 
-``` bash
+```bash
 docker-compose -f docker-compose-local.yaml up --build
 ```
 
 Tip: to rebuild only 1 service you need to
-``` bash
+```bash
 docker-compose -f docker-compose-local.yaml up --detach --build {service-name}
 ```
 
-### To run tests execute
-``` bash
+## To run tests execute
+```bash
 docker-compose -f docker-compose-local.yaml exec backend pytest
 ```
+
+## To run DB migration
+```bash
+docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
+```
+### To run second migration
+```bash
+docker-compose -f docker-compose-local.yaml exec backend alembic revision -m "Add a column"
+```
+Edit the file `online-diary/services/backend/migrations/versions/b54somehash14_add_a_column.py` to correct the migration
+
+Run again to head
+```bash
+docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
+```
+
 
 # TODO: Gitlab readme template fill
 ## Getting started
