@@ -7,6 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
 import app.core.crud as crud
+from app.core.schemas.users import User
 from app.core.schemas.authorization import TokenData
 
 SECRET_KEY = config('SECRET_KEY')
@@ -60,3 +61,21 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     if user is None:
         raise credentials_exception
     return user
+
+def get_current_user_with_scopes(scopes: list[int]):
+    """
+    Decorator сlosure to check if user have sufficient privileges
+    :param scopes: List of obligatory privileges
+    :return: Dependency function to get user with sufficient privileges
+    TODO: document exceptions https://fastapi.tiangolo.com/tutorial/metadata/
+        https://fastapi.tiangolo.com/tutorial/handling-errors/
+    """
+    rights_exception = HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Insufficient rights to a resource",
+    )
+    async def get_concrete_user(current_user: User = Depends(get_current_user)):
+        if current_user.type in scopes:
+            return current_user
+        raise rights_exception
+    return get_concrete_user
