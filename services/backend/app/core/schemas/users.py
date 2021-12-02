@@ -8,7 +8,7 @@ class User(BaseModel):
     type: int = Field(...)
     name: str = Field(...)
     surname: str = Field(...)
-    midname: str = Field(...)
+    midname: Optional[str]
     birthday: date = Field(...)
 
 class NewUser(User):
