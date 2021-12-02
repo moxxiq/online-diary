@@ -93,4 +93,3 @@ def test_read_users_me_unauthorized(test_app):
         "/users/me/",
     )
     assert response.status_code == 401
-    assert response
