@@ -32,6 +32,17 @@ async def get_by_email(email: str):
             return gen_db_users(**u)
     return None
 
+async def get_all(page=None, per_page=None):
+    return (gen_db_users(**u) for u in fictive_db_users)
+
+def test_get_users(test_app, monkeypatch):
+    monkeypatch.setattr(crud.users, "get_all", get_all)
+    user_AT = create_access_token(data={"sub": fictive_db_users[0]["email"]})
+    response = test_app.get(
+        "/users/",
+        headers={'Authorization': f'Bearer {user_AT}'}, )
+    assert response.status_code == 201
+    assert len(response.json()['users']) == len(fictive_db_users)
 
 @pytest.mark.parametrize(
     "email, status_code",
@@ -70,7 +81,6 @@ def test_create_user(test_app, monkeypatch, email, status_code):
 )
 def test_read_users_me(test_app, monkeypatch, email, status_code):
     monkeypatch.setattr(crud.users, "get_by_email", get_by_email)
-
     user_AT = create_access_token(data={"sub": email})
     response = test_app.get(
         "/users/me/",
@@ -83,3 +93,4 @@ def test_read_users_me_unauthorized(test_app):
         "/users/me/",
     )
     assert response.status_code == 401
+    assert response

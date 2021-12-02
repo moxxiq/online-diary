@@ -7,9 +7,6 @@ from app.core.schemas.users import User, NewUser, UserInDB
 router = APIRouter()
 
 
-@router.get("/me", response_model=UserInDB)
-async def read_users_me(current_user: User = Depends(get_current_user)):
-    return current_user
 
 @router.post("/", response_model=UserInDB, status_code=201)
 async def create_user(payload: NewUser, current_user: User = Depends(get_current_user_with_scopes([1]))):
@@ -19,3 +16,7 @@ async def create_user(payload: NewUser, current_user: User = Depends(get_current
     user_id = await crud.users.post(payload)
     response_object = await crud.users.get(user_id)
     return response_object
+
+@router.get("/me", response_model=UserInDB)
+async def read_users_me(current_user: User = Depends(get_current_user)):
+    return current_user
