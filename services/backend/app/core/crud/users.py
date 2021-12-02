@@ -7,6 +7,9 @@ async def get(id: int):
     query = users.select().where(id == users.c.id)
     return await database.fetch_one(query=query)
 
+async def get_all(page=None, per_page=None):
+    pass
+
 async def get_by_email(email: str):
     query = users.select().where(email == users.c.email)
     return await database.fetch_one(query=query)
