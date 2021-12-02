@@ -49,7 +49,7 @@ def test_read_users_me_unauthorized(test_app):
     "email, status_code",
     [
         ['admin@kpi.ua', 201],  # Normal case
-        ['teacher.or.someone.else@kpi.ua', 403], # User has credentials but his not in database
+        ['teacher.or.someone.else@kpi.ua', 403], # User has no privileges
     ],
 )
 def test_create_user(test_app, monkeypatch, email, status_code):
