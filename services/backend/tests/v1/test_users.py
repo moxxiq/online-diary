@@ -1,4 +1,3 @@
-import json
 from datetime import date
 
 import pytest
@@ -7,68 +6,41 @@ import app.core.crud as crud
 from app.core.authorization import get_password_hash, create_access_token
 from app.core.schemas.users import UserInDB, NewUser
 
-
-@pytest.mark.parametrize(
-    "email, status_code",
-    [
-        ['evil.hacker@kpi.ua', 200],  # Normal case
-        ['another.hacker@kpi.ua', 401], # User has credentials but his not in database
-    ],
+# Declare DB users
+fictive_users = dict(
+    keys=["email", "type"],
+    values=[
+        ['admin@kpi.ua', 1],
+        ['teacher.or.someone.else@kpi.ua', 2],
+        ['evil.hacker@kpi.ua', 1],
+    ]
 )
-def test_read_users_me(test_app, monkeypatch, email, status_code):
-    user_email = 'evil.hacker@kpi.ua'
-    user_in_db = UserInDB(
-        id=1,
-        email=user_email,
-        hashed_password=get_password_hash("password"),
-        type=1,
-        name='admin',
-        surname='admin',
-        midname='anything',
-        birthday=date(2000, 1, 1),
-    )
-    async def get_by_email(email):
-        if email == user_email:
-            return user_in_db
-        return None
-    monkeypatch.setattr(crud.users, "get_by_email", get_by_email)
+fictive_db_users = [dict(zip(fictive_users["keys"], w)) for w in fictive_users["values"]]
 
-    user_AT = create_access_token(data={"sub": email})
-    response = test_app.get(
-        "/users/me/",
-        headers={'Authorization': f'Bearer {user_AT}'},)
-    assert response.status_code == status_code
 
-def test_read_users_me_unauthorized(test_app):
-    response = test_app.get(
-        "/users/me/",
+def gen_db_users(id=1, email='sample@email.com', hashed_password="password", type=1,
+                 name='admin', surname='admin', birthday=date(2000, 1, 1), ):
+    return UserInDB(
+        id=id, email=email, hashed_password=get_password_hash(hashed_password), type=type,
+        name=name, surname=surname, birthday=birthday,
     )
-    assert response.status_code == 401
+
+
+async def get_by_email(email: str):
+    for u in fictive_db_users:
+        if u["email"] == email:
+            return gen_db_users(**u)
+    return None
+
 
 @pytest.mark.parametrize(
     "email, status_code",
     [
         ['admin@kpi.ua', 201],  # Normal case
-        ['teacher.or.someone.else@kpi.ua', 403], # User has no privileges
+        ['teacher.or.someone.else@kpi.ua', 403],  # User has no privileges
     ],
 )
 def test_create_user(test_app, monkeypatch, email, status_code):
-    user_in_db = lambda email, type: UserInDB(
-        id=1,
-        email=email,
-        hashed_password=get_password_hash("password"),
-        type=type,
-        name='admin',
-        surname='admin',
-        birthday=date(2000, 1, 1),
-    )
-    async def get_by_email(email):
-        if email == 'admin@kpi.ua':
-            return user_in_db(email, 1)
-        if email == 'teacher.or.someone.else@kpi.ua':
-            return user_in_db(email, 2)
-        return None
-
     async def nothing(*args, **kwargs):
         return None
 
@@ -82,8 +54,32 @@ def test_create_user(test_app, monkeypatch, email, status_code):
             "/users/",
             data=NewUser(name='New', surname='User', birthday=date(2000, 1, 1), password='qwe',
                          email='em@i.l', type=2).json(),
-            headers={'Authorization': f'Bearer {user_AT}'},)
+            headers={'Authorization': f'Bearer {user_AT}'}, )
     except Exception as e:
         print(e)
         assert e == ''
     assert response.status_code == status_code
+
+
+@pytest.mark.parametrize(
+    "email, status_code",
+    [
+        ['evil.hacker@kpi.ua', 200],  # Normal case
+        ['another.hacker@kpi.ua', 401],  # User has credentials but his not in database
+    ],
+)
+def test_read_users_me(test_app, monkeypatch, email, status_code):
+    monkeypatch.setattr(crud.users, "get_by_email", get_by_email)
+
+    user_AT = create_access_token(data={"sub": email})
+    response = test_app.get(
+        "/users/me/",
+        headers={'Authorization': f'Bearer {user_AT}'}, )
+    assert response.status_code == status_code
+
+
+def test_read_users_me_unauthorized(test_app):
+    response = test_app.get(
+        "/users/me/",
+    )
+    assert response.status_code == 401
