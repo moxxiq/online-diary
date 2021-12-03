@@ -30,7 +30,11 @@ docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
 ```
 ### To run second migration
 ```bash
-docker-compose -f docker-compose-local.yaml exec backend alembic revision -m "Add a column"
+docker-compose -f docker-compose-local.yaml exec backend alembic revision --autogenerate -m "Add a column" 
+```
+And change owner of the files if it is needed
+```bash
+docker-compose -f docker-compose-local.yaml exec backend chown -R 1000:1000 migrations
 ```
 Edit the file `online-diary/services/backend/migrations/versions/b54somehash14_add_a_column.py` to correct the migration
 
@@ -38,7 +42,7 @@ Run again to head
 ```bash
 docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
 ```
-
+> **WARNING**: If you add a new model, put its metatada into `target_metadata` in file `services/backend/migrations/env.py`
 
 # TODO: Gitlab readme template fill
 ## Getting started
