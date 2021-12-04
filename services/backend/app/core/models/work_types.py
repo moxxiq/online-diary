@@ -12,10 +12,10 @@ from sqlalchemy.sql import func
 
 metadata = MetaData()
 
-work_type = Table(
-    "work_type",
+work_types = Table(
+    "work_types",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("work_type", String),
-    UniqueConstraint('work_type', name="uq_work_type"),
+    Column("name", String),
+    UniqueConstraint('name', name="uq_work_type_name"),
 )
