@@ -22,7 +22,7 @@ marks = Table(
     "marks",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("creation_date", DateTime, default=func.now()),
+    Column("creation_date", DateTime, nullable=False, default=func.now()),
     Column("comment", String),
     Column("workplace_id", Integer, nullable=False),
     Column("student_id", Integer, nullable=False),

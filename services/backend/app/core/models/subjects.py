@@ -16,6 +16,6 @@ subjects = Table(
     "subjects",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("name", String),
+    Column("name", String, nullable=False),
     UniqueConstraint('name', name="uq_subjects_name"),
 )

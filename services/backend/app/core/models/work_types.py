@@ -16,6 +16,6 @@ work_types = Table(
     "work_types",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("name", String),
+    Column("name", String, nullable=False),
     UniqueConstraint('name', name="uq_work_type_name"),
 )
