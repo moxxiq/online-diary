@@ -6,7 +6,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from app.core.models import (
-    notes, users, teachers, subjects, work_type,
+    notes, users, teachers, subjects, work_type, classes
 )
 
 # this is the Alembic Config object, which provides
@@ -24,7 +24,7 @@ config.set_main_option('sqlalchemy.url', env_config('DATABASE_URL'))
 # target_metadata = mymodel.Base.metadata
 target_metadata = [
     notes.metadata, users.metadata, teachers.metadata, subjects.metadata,
-    work_type.metadata,
+    work_type.metadata, classes.metadata,
 ]
 
 # other values from the config, defined by the needs of env.py,
