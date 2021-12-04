@@ -20,8 +20,8 @@ metadata = MetaData()
 teachers = Table(
     "teachers",
     metadata,
-    Column("users_id", Integer),
+    Column("user_id", Integer),
     Column("position", String),
-    ForeignKeyConstraint(["users_id"], [users.c.id], name="teachers_users_id_fk", ondelete="CASCADE"),
-    PrimaryKeyConstraint("users_id", name='teachers_users_id_pk'),
+    ForeignKeyConstraint(["user_id"], [users.c.id], name="teachers_users_id_fk", ondelete="CASCADE"),
+    PrimaryKeyConstraint("user_id", name='teachers_users_id_pk'),
 )
