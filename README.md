@@ -45,7 +45,6 @@ docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
 > **WARNING**: If you add a new model, put its metatada into `target_metadata` in file `services/backend/migrations/env.py`
 
 ## Database structure
-pre-mohckup
 ![Database structure](blob/img/db.png)
 # TODO: Gitlab readme template fill
 ## Getting started
