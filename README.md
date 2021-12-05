@@ -46,7 +46,7 @@ docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
 
 ## Database structure
 pre-mohckup
-![Database structure](blob/img/db.svg)
+![Database structure](blob/img/db.png)
 # TODO: Gitlab readme template fill
 ## Getting started
 
