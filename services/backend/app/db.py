@@ -2,7 +2,7 @@ from decouple import config
 from sqlalchemy import create_engine
 from databases import Database
 
-DATABASE_URL = config('DATABASE_URL_SQL')
+DATABASE_URL = config('DATABASE_URL')
 
 # SQLAlchemy
 engine = create_engine(DATABASE_URL)
