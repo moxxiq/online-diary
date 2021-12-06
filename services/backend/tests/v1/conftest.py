@@ -6,7 +6,8 @@ from starlette.testclient import TestClient
 # from alembic.config import Config
 
 from app.main import v1
-from app.db import DATABASE_URL
+from app.config import DATABASE_URL
+
 
 # @pytest.fixture(scope="session", autouse=True)
 # def create_test_database():

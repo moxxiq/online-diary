@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from decouple import config
+from app.config import SECRET_KEY, ALGORITHM
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -10,8 +10,6 @@ import app.core.crud as crud
 from app.core.schemas.users import User
 from app.core.schemas.authorization import TokenData
 
-SECRET_KEY = config('SECRET_KEY')
-ALGORITHM = config('ALGORITHM')
 ACCESS_TOKEN_EXPIRE_MINUTES = 10080 # or 30 with refresh token
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -75,7 +73,7 @@ def get_current_user_with_scopes(scopes: list[int]):
         detail="Insufficient rights to a resource",
     )
     async def get_concrete_user(current_user: User = Depends(get_current_user)):
-        if current_user.get("type") in scopes:
+        if current_user.type in scopes:
             return current_user
         raise rights_exception
     return get_concrete_user

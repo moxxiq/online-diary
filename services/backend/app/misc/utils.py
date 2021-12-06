@@ -1,13 +1,13 @@
 from datetime import date
 
-from decouple import config
+from app.config import FASTAPI_ADMIN_EMAIL, FASTAPI_ADMIN_PASSWORD
 
 from app.core import crud
 from app.core.schemas.users import NewUser
 
 async def create_admin_if_not_exists():
-    email = config('FASTAPI_ADMIN_EMAIL')
-    password = config('FASTAPI_ADMIN_PASSWORD')
+    email = FASTAPI_ADMIN_EMAIL
+    password = FASTAPI_ADMIN_PASSWORD
     if not (email and password):
         # Exit if there is no config
         return
