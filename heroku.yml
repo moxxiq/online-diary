@@ -1,0 +1,12 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+build:
+  docker:
+      web: services/backend/Dockerfile
+release:
+  image: web
+  command:
+    - alembic upgrade head
+run:
+  web: gunicorn -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT main:app
