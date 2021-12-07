@@ -23,7 +23,7 @@ def gen_db_users(id=1, email='sample@email.com', hashed_password="password", typ
     return UserInDB(
         id=id, email=email, hashed_password=get_password_hash(hashed_password), type=type,
         name=name, surname=surname, birthday=birthday,
-    )
+    ).dict()
 
 
 async def get_by_email(email: str):
