@@ -9,7 +9,7 @@ class User(BaseModel):
     name: str = Field(...)
     surname: str = Field(...)
     midname: Optional[str]
-    birthday: date = Field(...)
+    birthday: Optional[date]
 
 class NewUser(User):
     password: str = Field(...)
