@@ -24,5 +24,4 @@ users = Table(
     Column('birthday', Date),
     # SET A NAME. REQUIRED TO THE MIGRATIONS
     # https://alembic.sqlalchemy.org/en/latest/naming.html
-    UniqueConstraint('name', 'surname', 'midname', 'birthday', name="uq_users_name_surname_midname_birthday"),
 )
