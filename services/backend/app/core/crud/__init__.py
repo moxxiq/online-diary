@@ -6,4 +6,10 @@ from . import (
     users,
     teachers,
     classes,
+    subjects,
+    marks,
+    students,
+    work_types,
+    works,
+    workplaces,
 )
