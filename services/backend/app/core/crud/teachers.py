@@ -4,12 +4,9 @@ from app.core.models.teachers import teachers
 
 
 async def post(payload: Teacher):
-    query = teachers.insert().values(
-        id=payload.id,
-        position=payload.position,
-    )
+    query = teachers.insert().values(**payload.dict())
     return await database.execute(query=query)
 
-async def get(id: int):
-    query = teachers.select().where(id == teachers.c.user_id)
+async def get(user_id: int):
+    query = teachers.select().where(user_id == teachers.c.user_id)
     return await database.fetch_one(query=query)
