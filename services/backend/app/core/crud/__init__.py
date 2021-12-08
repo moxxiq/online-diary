@@ -5,4 +5,5 @@ from . import (
     notes,
     users,
     teachers,
+    classes,
 )
