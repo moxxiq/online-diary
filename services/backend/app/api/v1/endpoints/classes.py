@@ -19,7 +19,7 @@ async def create_class(payload: Class, current_user: User = Depends(get_current_
     return response_object
 
 @router.get("/{id}/", response_model=ClassDB)
-async def read_class(id: int = Path(..., gt=0),):
+async def read_class(id: int = Path(..., gt=0), user: User = Depends(get_current_user)):
     class_in_db = await crud.classes.get(id)
     if not class_in_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Note not found")
