@@ -47,12 +47,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print(f"{payload = }")
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
         token_data = TokenData(username=username)
-        print(f"{token_data = }")
     except JWTError:
         raise credentials_exception
     user = await crud.users.get_by_email(token_data.username)
@@ -73,7 +71,7 @@ def get_current_user_with_scopes(scopes: list[int]):
         detail="Insufficient rights to a resource",
     )
     async def get_concrete_user(current_user: User = Depends(get_current_user)):
-        if current_user.type in scopes:
+        if current_user.get("type") in scopes:
             return current_user
         raise rights_exception
     return get_concrete_user
