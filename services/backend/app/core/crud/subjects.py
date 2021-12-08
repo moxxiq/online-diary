@@ -10,3 +10,7 @@ async def post(payload: Subject):
 async def get(id: int):
     query = subjects.select().where(id == subjects.c.id)
     return await database.fetch_one(query=query)
+
+async def get_by_attrs(payload: Subject):
+    query = subjects.select().where(payload.name == subjects.c.name)
+    return await database.fetch_one(query=query)
