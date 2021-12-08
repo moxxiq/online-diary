@@ -19,7 +19,7 @@ async def create_teacher(payload: Teacher, current_user: User = Depends(get_curr
     return response_object
 
 @router.get("/{user_id}/", response_model=Teacher)
-async def read_teacher(user_id: int = Path(..., gt=0),):
+async def read_teacher(user_id: int = Path(..., gt=0), user: User = Depends(get_current_user)):
     teacher = await crud.teachers.get(user_id)
     if not teacher:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Note not found")
