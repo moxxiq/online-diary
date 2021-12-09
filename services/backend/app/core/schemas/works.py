@@ -3,12 +3,14 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-class Work(BaseModel):
-    workplace_id: int = Field(..., gt=0)
-    worktype_id: int = Field(..., gt=0)
+class WorkContent(BaseModel):
     headline: str = Field(...)
     deadline: Optional[datetime]
     description: Optional[str]
+    worktype_id: int = Field(..., gt=0)
+
+class Work(WorkContent):
+    workplace_id: int = Field(..., gt=0)
 
 class WorkDB(Work):
     id: int = Field(..., gt=0)
