@@ -7,6 +7,7 @@ from . import (
     classes,
     subjects,
     students,
+    workplaces,
 
 )
 
@@ -22,3 +23,4 @@ all.include_router(teachers.router, prefix="/teachers", tags=["teachers"])
 all.include_router(classes.router, prefix="/classes", tags=["classes"])
 all.include_router(students.router, prefix="/students", tags=["students"])
 all.include_router(subjects.router, prefix="/subjects", tags=["subjects"])
+all.include_router(workplaces.router, prefix="/", tags=["workplaces"])
