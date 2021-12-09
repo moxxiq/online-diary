@@ -22,5 +22,5 @@ async def create_subject(payload: Subject, current_user: User = Depends(get_curr
 async def read_subject(id: int = Path(..., gt=0), user: User = Depends(get_current_user)):
     subject_in_db = await crud.subjects.get(id)
     if not subject_in_db:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Note not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subject not found")
     return subject_in_db

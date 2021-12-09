@@ -22,5 +22,5 @@ async def create_student(payload: Student, current_user: User = Depends(get_curr
 async def read_student(user_id: int = Path(..., gt=0), user: User = Depends(get_current_user)):
     student = await crud.students.get(user_id)
     if not student:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Note not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stuent not found")
     return student
