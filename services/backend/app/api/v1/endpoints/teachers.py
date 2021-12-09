@@ -22,5 +22,5 @@ async def create_teacher(payload: Teacher, current_user: User = Depends(get_curr
 async def read_teacher(user_id: int = Path(..., gt=0), user: User = Depends(get_current_user)):
     teacher = await crud.teachers.get(user_id)
     if not teacher:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Note not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Teacher not found")
     return teacher
