@@ -7,7 +7,7 @@ from app.core.schemas.workplaces import Workplace, WorkplaceDB
 
 router = APIRouter()
 
-@router.post("workplaces/", response_model=WorkplaceDB, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=WorkplaceDB, status_code=status.HTTP_201_CREATED)
 async def create_workplace(payload: Workplace, current_user: User = Depends(get_current_user_with_scopes([1, 2]))):
     workplace_in_db = await crud.workplaces.get_by_attrs(payload)
     if workplace_in_db:
@@ -16,15 +16,9 @@ async def create_workplace(payload: Workplace, current_user: User = Depends(get_
     response_object = await crud.workplaces.get(workplace_id)
     return response_object
 
-@router.get("workplaces/{id}/", response_model=WorkplaceDB)
+@router.get("/{id}/", response_model=WorkplaceDB)
 async def read_workplace(id: int = Path(..., gt=0), user: User = Depends(get_current_user)):
     workplace_in_db = await crud.workplaces.get(id)
     if not workplace_in_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Workplace not found")
     return workplace_in_db
-
-@router.get("/teacher/{user_id}/subject/{subject_id}/class/{class_id}/workplaces", response_model=WorkplaceDB)
-async def read_teacher_subject_class_workplace(user_id: int = Path(..., gt=0),
-                                               subject_id: int = Path(..., gt=0),
-                                               class_id: int = Path(..., gt=0)):
-    pass  # TODO: finish this
