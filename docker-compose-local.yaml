@@ -20,6 +20,18 @@ services:
       - FASTAPI_ADMIN_EMAIL=admin@kpi.ua
       - FASTAPI_ADMIN_PASSWORD=admin
       - PORT=8000
+  frontend:
+    container_name: react-frontend
+    stdin_open: true
+    build:
+      context: ./services/frontend
+      dockerfile: Dockerfile
+    command: npm start
+    volumes:
+      - './services/frontend:/frontend:cached'
+      - './services/frontend/node_modules:/frontend/node_modules:cached'
+    ports:
+      - "8001:3000"
   db:
     image: postgres:14-bullseye
     volumes:
