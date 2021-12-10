@@ -23,6 +23,8 @@ async def read_workplace(id: int = Path(..., gt=0), user: User = Depends(get_cur
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Workplace not found")
     return workplace_in_db
 
-@router.get("/teacher/{user_id}/subject/{subject_id}/class/{class_id}/workplaces", response_class=WorkplaceDB)
-async def read_teacher_subject_class_workplace():
+@router.get("/teacher/{user_id}/subject/{subject_id}/class/{class_id}/workplaces", response_model=WorkplaceDB)
+async def read_teacher_subject_class_workplace(user_id: int = Path(..., gt=0),
+                                               subject_id: int = Path(..., gt=0),
+                                               class_id: int = Path(..., gt=0)):
     pass  # TODO: finish this
