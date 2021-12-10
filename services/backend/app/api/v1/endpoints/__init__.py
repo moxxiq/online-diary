@@ -8,6 +8,7 @@ from . import (
     subjects,
     students,
     workplaces,
+    work_types,
 
 )
 
