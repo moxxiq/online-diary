@@ -9,6 +9,7 @@ from . import (
     students,
     workplaces,
     work_types,
+    works,
 
 )
 
@@ -26,3 +27,4 @@ all.include_router(students.router, prefix="/students", tags=["students"])
 all.include_router(subjects.router, prefix="/subjects", tags=["subjects"])
 all.include_router(workplaces.router, prefix="/workplaces", tags=["workplaces"])
 all.include_router(work_types.router, prefix="/work_types", tags=["work_types"])
+all.include_router(works.router, prefix="/works", tags=["works"])
