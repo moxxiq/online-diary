@@ -27,9 +27,11 @@ services:
       context: ./services/frontend
       dockerfile: Dockerfile
     command: npm start
+    environment:
+      - NODE_ENV=development
     volumes:
-      - './services/frontend:/frontend:cached'
-      - './services/frontend/node_modules:/frontend/node_modules:cached'
+      - './services/frontend:/frontend'
+      - './services/frontend/node_modules:/frontend/node_modules'
     ports:
       - "8001:3000"
   db:
