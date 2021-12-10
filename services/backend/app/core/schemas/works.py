@@ -7,7 +7,7 @@ class WorkContent(BaseModel):
     headline: str = Field(...)
     deadline: Optional[datetime]
     description: Optional[str]
-    worktype_id: int = Field(..., gt=0)
+    work_type_id: int = Field(..., gt=0)
 
 class Work(WorkContent):
     workplace_id: int = Field(..., gt=0)
