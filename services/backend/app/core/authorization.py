@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
 import app.core.crud as crud
-from app.core.schemas.users import User
+from app.core.schemas.users import UserInDB
 from app.core.schemas.authorization import TokenData
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 10080 # or 30 with refresh token
@@ -70,7 +70,7 @@ def get_current_user_with_scopes(scopes: list[int]):
         status_code=status.HTTP_403_FORBIDDEN,
         detail="Insufficient rights to a resource",
     )
-    async def get_concrete_user(current_user: User = Depends(get_current_user)):
+    async def get_concrete_user(current_user: UserInDB = Depends(get_current_user)):
         if current_user.get("type") in scopes:
             return current_user
         raise rights_exception
