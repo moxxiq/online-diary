@@ -45,5 +45,13 @@ async def delete_work(id: int = Path(..., gt=0), current_user: UserInDB = Depend
     await crud.works.delete((id))
     return work_in_db
 
-# TODO: add gett all work with the same teacher subject class
-# i. e. like: /workplaces/{id}/works/
+@router.get("/workplaces/{workplace_id}/works/", response_model=list[WorkDB])
+async def get_all_workplace_works(workplace_id: int = Path(..., gt=0), current_user: UserInDB = Depends(get_current_user_with_scopes([1, 2, 3]))):
+    workplace_in_db = await crud.workplaces.get(workplace_id)
+    if not workplace_in_db:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Workplace not found")
+    if current_user.get("type") not in [1, 2]: # Teacher -> can view all
+        if not await crud.classes.if_student_in_class(student_id=current_user.get(id),
+                                                      class_id=workplace_in_db.class_id):
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Student is not in workspaces class")
+    return await crud.works.get_all_workplace_works(workplace_id)
