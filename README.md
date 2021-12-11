@@ -1,5 +1,5 @@
 # Online Diary
-
+**Frontend**[![Netlify Status](https://api.netlify.com/api/v1/badges/4a7c60c4-0532-48d7-b160-f7bf4a75166d/deploy-status)](https://app.netlify.com/sites/online-diary-mathape/deploys) **Backend**[![Heroku Status](https://gitlab.com/MathApe/online-diary/badges/main/pipeline.svg)](https://gitlab.com/%{project_path}/-/commits/%{default_branch})
 ## How to run locally
 ### Step 1. Clone the repository with:
 
@@ -47,41 +47,8 @@ docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
 ## Database structure
 ![Database structure](blob/img/db.png)
 # TODO: Gitlab readme template fill
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line)
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://gitlab.com/MathApe/online-diary/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
 ***
-
 # Editing this README
 
 When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://www.makeareadme.com/) for this template.
@@ -94,12 +61,6 @@ Choose a self-explaining name for your project.
 
 ## Description
 Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-**Netlify Frontend** [![Netlify Status](https://api.netlify.com/api/v1/badges/4a7c60c4-0532-48d7-b160-f7bf4a75166d/deploy-status)](https://app.netlify.com/sites/online-diary-mathape/deploys)
-**Heroku Backend** [![Heroku Status](https://gitlab.com/MathApe/online-diary/badges/main/pipeline.svg)](https://gitlab.com/%{project_path}/-/commits/%{default_branch})
-
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
 
 ## Visuals
 Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
