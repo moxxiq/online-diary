@@ -1,0 +1,28 @@
+
+.login_page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #36333a;
+}
+
+.login_header {
+    display: inline-flex;
+    align-items: center;
+}
+
+.login_form {
+    width: 40%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 10px 12px -4px grey;
+}
+
+.login_form_item {
+    width: 100%;
+    margin-top: 1em !important;
+}
