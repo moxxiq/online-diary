@@ -1,5 +1,5 @@
 # Online Diary
-**Frontend**[![Netlify Status](https://api.netlify.com/api/v1/badges/4a7c60c4-0532-48d7-b160-f7bf4a75166d/deploy-status)](https://app.netlify.com/sites/online-diary-mathape/deploys) **Backend**[![Heroku Status](https://gitlab.com/MathApe/online-diary/badges/main/pipeline.svg)](https://gitlab.com/%{project_path}/-/commits/%{default_branch})
+**Frontend •** [![Netlify Status](https://api.netlify.com/api/v1/badges/4a7c60c4-0532-48d7-b160-f7bf4a75166d/deploy-status)](https://app.netlify.com/sites/online-diary-mathape/deploys) **Backend •** [![Heroku Status](https://gitlab.com/MathApe/online-diary/badges/main/pipeline.svg?style=flat-square)](https://gitlab.com/%{project_path}/-/commits/%{default_branch})
 ## How to run locally
 ### Step 1. Clone the repository with:
 

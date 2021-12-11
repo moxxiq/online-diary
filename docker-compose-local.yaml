@@ -20,6 +20,7 @@ services:
       - FASTAPI_ADMIN_EMAIL=admin@kpi.ua
       - FASTAPI_ADMIN_PASSWORD=admin
       - PORT=8000
+      - CORS_ORIGINS=http://localhost:8001,https://some.app/
   frontend:
     container_name: react-frontend
     stdin_open: true
