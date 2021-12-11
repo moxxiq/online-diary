@@ -30,3 +30,11 @@ async def put(id: int, payload: WorkContent):
 async def delete(id: int):
     query = works.delete().where(id == works.c.id)
     return await database.execute(query=query)
+
+async def get_all_workplace_works(workplace_id: int):
+    query = (
+        works
+        .select()
+        .where(workplace_id == works.c.workplace_id)
+    )
+    return await database.fetch_all(query=query)
