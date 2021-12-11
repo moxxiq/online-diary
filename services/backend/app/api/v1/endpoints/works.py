@@ -7,13 +7,13 @@ from app.core.schemas.works import Work, WorkDB, WorkContent
 
 router = APIRouter()
 
-@router.post("/", response_model=WorkDB, status_code=status.HTTP_201_CREATED)
+@router.post("/works/", response_model=WorkDB, status_code=status.HTTP_201_CREATED)
 async def create_work(payload: Work, current_user: UserInDB = Depends(get_current_user_with_scopes([1, 2]))):
     work_id = await crud.works.post(payload)
     response_object = await crud.works.get(work_id)
     return response_object
 
-@router.put("/{id}/", response_model=WorkContent)
+@router.put("/works/{id}/", response_model=WorkContent)
 async def update_work(payload: WorkContent, id: int = Path(..., gt=0), current_user: UserInDB = Depends(get_current_user_with_scopes([1, 2]))):
     work = await crud.works.get(id)
     if not work:
@@ -30,14 +30,14 @@ async def update_work(payload: WorkContent, id: int = Path(..., gt=0), current_u
     }
     return response_object
 
-@router.get("/{id}/", response_model=WorkDB)
+@router.get("/works/{id}/", response_model=WorkDB)
 async def read_work(id: int = Path(..., gt=0), current_user: UserInDB = Depends(get_current_user_with_scopes([1, 2, 3]))):
     work_in_db = await crud.works.get(id)
     if not work_in_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Work not found")
     return work_in_db
 
-@router.delete("/{id}/", response_model=WorkDB)
+@router.delete("/works/{id}/", response_model=WorkDB)
 async def delete_work(id: int = Path(..., gt=0), current_user: UserInDB = Depends(get_current_user_with_scopes([1, 2]))):
     work_in_db = await crud.works.get(id)
     if not work_in_db:
@@ -53,5 +53,5 @@ async def get_all_workplace_works(workplace_id: int = Path(..., gt=0), current_u
     if current_user.get("type") not in [1, 2]: # Teacher -> can view all
         if not await crud.classes.if_student_in_class(student_id=current_user.get(id),
                                                       class_id=workplace_in_db.class_id):
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Student is not in workspaces class")
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Student is not in workplaces class")
     return await crud.works.get_all_workplace_works(workplace_id)
