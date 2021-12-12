@@ -52,7 +52,7 @@ export default function ProfileCard() {
       <CardMedia
         component="img"
         height="194"
-        image="/static/images/cards/paella.jpg"
+        image="https://kpi.ua/files/kpi_0.png"
         alt="Paella dish"
       />
       <CardContent>
