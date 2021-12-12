@@ -5,6 +5,7 @@ import {
     Route
 } from 'react-router-dom';
 import LoginPage from '../../components/LoginPage';
+import ProfilePage from '../../pages/ProfilePage'
 import PrivateRoute from '../PrivateRoute';
 
 // just mock. delete it later
@@ -21,9 +22,15 @@ const Routing = () => {
         <Router>
             <Switch>
                 <Route exact path="/">
+                    <ProfilePage>
+
+                    </ProfilePage>
                     <PrivateRoute Component={MyComponent} exact path="/" />
                 </Route>
                 <Route path="/login">
+                    <LoginPage />
+                </Route>
+                <Route path="/journal">
                     <LoginPage />
                 </Route>
             </Switch>

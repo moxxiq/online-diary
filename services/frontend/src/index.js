@@ -5,10 +5,12 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Routing from './containers/Routing';
 import reportWebVitals from './reportWebVitals';
+import ResponsiveAppBar from './components/ResponsiveAppBar'
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <ResponsiveAppBar/>
       <Routing />
     </Provider>
   </React.StrictMode>,
