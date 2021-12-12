@@ -22,7 +22,7 @@ def get_password_hash(password) -> str:
     return pwd_context.hash(password)
 
 async def authenticate_user(email: str, password: str):
-    user = await crud.users.get_by_email(email)
+    user = await crud.users.get_user_with_hashed_password_by_email_with(email)
     if not user:
         return False
     if not verify_password(password, user.get("hashed_password")):
