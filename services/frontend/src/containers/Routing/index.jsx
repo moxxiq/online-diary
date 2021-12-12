@@ -11,7 +11,7 @@ const Routing = () => {
         <Router>
             <Switch>
                 <Route exact path="/">
-                    <label>pasha</label>
+                    <label>Кря!</label>
                 </Route>
                 <Route path="/login">
                     <LoginPage />
