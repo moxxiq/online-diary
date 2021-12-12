@@ -28,17 +28,13 @@ services:
       context: ./services/frontend
       dockerfile: Dockerfile
 #    command: yarn start
-    command:
-      - bash -c "envsubst '\$PORT' < /etc/nginx/conf.d/configfile.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     environment:
       - NODE_ENV=development
-      - PORT=8001
-      - HOST=0.0.0.0
     volumes:
       - './services/frontend:/frontend'
       - './services/frontend/node_modules:/frontend/node_modules'
     ports:
-      - "8001:3000"
+      - "8001:8001"
   db:
     image: postgres:14-bullseye
     volumes:
