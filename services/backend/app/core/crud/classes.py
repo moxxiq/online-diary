@@ -26,3 +26,12 @@ async def if_student_in_class(student_id: int, class_id: int):
         .scalar()
     )
     return await database.fetch_val(query=query)
+
+async def search_class(class_number: int, class_name: str):
+    query = (
+        classes
+        .select()
+        .where(class_number == classes.c.number)
+        .where(classes.c.name.contains(class_name))
+    )
+    return await database.fetch_all(query=query)
