@@ -34,6 +34,7 @@ async def get_all_student_workplaces_with_details(student_id: int):
                   teachers.c.position.label("teacher_position"),
                   subjects.c.id.label("subject_id"), subjects.c.name.label("subject_name"),
                   classes.c.id.label("class_id"), classes.c.name.label("class_name"), classes.c.number.label("class_number"),
+                  workplaces.c.id,
                   )
         .select_from(workplaces
         .join(classes, workplaces.c.class_id == classes.c.id)
@@ -43,5 +44,20 @@ async def get_all_student_workplaces_with_details(student_id: int):
         .join(students, classes.c.id == students.c.class_id)
         )
         .where(students.c.user_id == student_id)
+    )
+    return await database.fetch_all(query=query)
+
+async def get_all_teachers_workplaces_with_details(teacher_id: int):
+    query = (
+        sa.select(subjects.c.id.label("subject_id"), subjects.c.name.label("subject_name"),
+                  classes.c.id.label("class_id"), classes.c.name.label("class_name"), classes.c.number.label("class_number"),
+                  workplaces.c.id,
+                  )
+        .select_from(workplaces
+        .join(classes, workplaces.c.class_id == classes.c.id)
+        .join(subjects, workplaces.c.subject_id == subjects.c.id)
+        .join(teachers, workplaces.c.teacher_id == teachers.c.user_id)
+        )
+        .where(teachers.c.user_id == teacher_id)
     )
     return await database.fetch_all(query=query)
