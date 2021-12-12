@@ -56,3 +56,11 @@ async def get_all_workplace_works(workplace_id: int = Path(..., gt=0), current_u
                                                       class_id=workplace_in_db.class_id):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Student is not in workplaces class")
     return await crud.works.get_all_workplace_works(workplace_id)
+
+@router.get("/classes/{class_id}/work_types/{work_type_id}/works/",)
+async def get_all_class_work_type_works(class_id: int, work_type_id: int, current_user: UserWithID = Depends(get_current_user_with_scopes([1, 2, 3]))):
+    if current_user.get("type") not in [1, 2]: # Teacher -> can view all
+        if not await crud.classes.if_student_in_class(student_id=current_user.get(id),
+                                                      class_id=class_id):
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Student is not in this class")
+    return await crud.works.get_all_class_work_type_works(class_id, work_type_id)
