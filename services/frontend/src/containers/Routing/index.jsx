@@ -5,15 +5,21 @@ import {
     Route
 } from 'react-router-dom';
 import LoginPage from '../../components/LoginPage';
+import ProfilePage from '../../pages/ProfilePage'
 
 const Routing = () => {
     return (
         <Router>
             <Switch>
                 <Route exact path="/">
-                    <label>pasha</label>
+                    <ProfilePage>
+
+                    </ProfilePage>
                 </Route>
                 <Route path="/login">
+                    <LoginPage />
+                </Route>
+                <Route path="/journal">
                     <LoginPage />
                 </Route>
             </Switch>
