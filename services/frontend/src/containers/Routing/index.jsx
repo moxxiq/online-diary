@@ -5,6 +5,16 @@ import {
     Route
 } from 'react-router-dom';
 import LoginPage from '../../components/LoginPage';
+import PrivateRoute from '../PrivateRoute';
+
+// just mock. delete it later
+const MyComponent = () => {
+    return (
+        <div>
+            <label>private route</label>
+        </div>
+    )
+}
 
 const Routing = () => {
     return (
