@@ -61,3 +61,13 @@ async def get_all_teachers_workplaces_with_details(teacher_id: int):
         .where(teachers.c.user_id == teacher_id)
     )
     return await database.fetch_all(query=query)
+
+async def get_all_class_teacher_workspaces(class_id: int, teacher_id: int):
+    query = (workplaces
+        .select()
+        .where(
+            (class_id == workplaces.c.class_id)
+            & (teacher_id == workplaces.c.teacher_id)
+        )
+    )
+    return await database.fetch_all(query=query)
