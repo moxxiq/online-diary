@@ -5,13 +5,22 @@ import {
     Route
 } from 'react-router-dom';
 import LoginPage from '../../components/LoginPage';
+import PrivateRoute from '../PrivateRoute';
+
+const MyComponent = () => {
+    return (
+        <div>
+            <label>private route</label>
+        </div>
+    )
+}
 
 const Routing = () => {
     return (
         <Router>
             <Switch>
                 <Route exact path="/">
-                    <label>Кря!</label>
+                    <PrivateRoute Component={MyComponent} exact path="/" />
                 </Route>
                 <Route path="/login">
                     <LoginPage />
