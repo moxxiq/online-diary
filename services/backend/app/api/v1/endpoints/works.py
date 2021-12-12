@@ -9,6 +9,7 @@ router = APIRouter()
 
 @router.post("/works/", response_model=WorkDB, status_code=status.HTTP_201_CREATED)
 async def create_work(payload: Work, current_user: UserWithID = Depends(get_current_user_with_scopes([1, 2]))):
+    # TODO: Fix vulnerability so anoter teacher couldn't create task for another groups
     work_id = await crud.works.post(payload)
     response_object = await crud.works.get(work_id)
     return response_object
