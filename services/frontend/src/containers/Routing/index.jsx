@@ -7,6 +7,7 @@ import {
 import LoginPage from '../../components/LoginPage';
 import PrivateRoute from '../PrivateRoute';
 
+// just mock. delete it later
 const MyComponent = () => {
     return (
         <div>
