@@ -8,6 +8,7 @@ from sqlalchemy import (
     Table,
     UniqueConstraint,
 )
+from datetime import datetime
 from sqlalchemy.sql import func
 
 metadata = MetaData()
@@ -17,6 +18,6 @@ classes = Table(
     metadata,
     Column("id", Integer, primary_key=True),
     Column("name", String, comment="Belonging to the concrete class among the same year i.e. A, B, C etc."),
-    Column("number", Integer, nullable=False, comment="The year the students went to first grade "),
+    Column("number", Integer, nullable=False, default=datetime.now().year, comment="The year the students went to first grade "),
     UniqueConstraint('name', 'number', name="uq_classes_name_number"),
 )
