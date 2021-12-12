@@ -1,6 +1,6 @@
 FROM node:lts-stretch as builder
 
-WORKDIR /app
+WORKDIR /frontend
 COPY package.json yarn.lock ./
 RUN yarn install
 
@@ -12,7 +12,7 @@ RUN yarn run build
 FROM nginx:1.19.9-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/configfile.template
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=builder /frontend/build /usr/share/nginx/html
 
 ENV PORT 8080
 ENV HOST 0.0.0.0
