@@ -6,6 +6,16 @@ import {
 } from 'react-router-dom';
 import LoginPage from '../../components/LoginPage';
 import ProfilePage from '../../pages/ProfilePage'
+import PrivateRoute from '../PrivateRoute';
+
+// just mock. delete it later
+const MyComponent = () => {
+    return (
+        <div>
+            <label>private route</label>
+        </div>
+    )
+}
 
 const Routing = () => {
     return (
@@ -15,6 +25,7 @@ const Routing = () => {
                     <ProfilePage>
 
                     </ProfilePage>
+                    <PrivateRoute Component={MyComponent} exact path="/" />
                 </Route>
                 <Route path="/login">
                     <LoginPage />
