@@ -26,7 +26,7 @@ async def get_by_email(email: str):
     )
     return await database.fetch_one(query=query)
 
-async def get_by_email_with_password(email: str):
+async def get_user_with_hashed_password_by_email_with(email: str):
     query = users.select().where(email.lower() == users.c.email)
     return await database.fetch_one(query=query)
 
