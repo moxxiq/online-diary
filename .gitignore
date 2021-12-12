@@ -140,3 +140,5 @@ cython_debug/
 
 # Pycharm project files
 .idea/
+
+node_modules/
