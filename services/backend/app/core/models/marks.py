@@ -10,6 +10,7 @@ from sqlalchemy import (
     ForeignKeyConstraint,
     PrimaryKeyConstraint,
     ForeignKey,
+    Numeric,
 )
 from sqlalchemy.sql import func
 
@@ -24,6 +25,7 @@ marks = Table(
     Column("id", Integer, primary_key=True),
     Column("creation_date", DateTime, nullable=False, default=func.now()),
     Column("comment", String),
+    Column("mark", Numeric),
     Column("work_id", Integer, nullable=False),
     Column("student_id", Integer, nullable=False),
     ForeignKeyConstraint(["work_id"], [works.c.id], name="marks_work_id_fk", ondelete="CASCADE"),
