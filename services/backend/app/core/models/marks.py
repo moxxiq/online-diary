@@ -30,4 +30,5 @@ marks = Table(
     Column("student_id", Integer, nullable=False),
     ForeignKeyConstraint(["work_id"], [works.c.id], name="marks_work_id_fk", ondelete="CASCADE"),
     ForeignKeyConstraint(["student_id"], [students.c.user_id], name="marks_student_id_fk", ondelete="CASCADE"),
+    UniqueConstraint("work_id", "student_id", name="uq_marks_work_id_student_id")
 )
