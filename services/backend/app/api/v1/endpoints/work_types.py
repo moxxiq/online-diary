@@ -7,7 +7,9 @@ from app.core.schemas.work_types import WorkType, WorkTypeDB
 
 router = APIRouter()
 
-
+@router.get("/", response_model=list[WorkTypeDB],)
+async def read_all_work_types(user: UserWithID = Depends(get_current_user)):
+    return await crud.work_types.get_all()
 
 @router.post("/", response_model=WorkTypeDB, status_code=status.HTTP_201_CREATED)
 async def create_work_type(payload: WorkType, current_user: UserWithID = Depends(get_current_user_with_scopes([1, 2]))):
