@@ -10,19 +10,19 @@ import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import SchoolIcon from "@mui/icons-material/School";
-import { get_student_workplaces, profile_fullname } from "../../helpers/profile";
+import { get_teacher_workplaces, profile_fullname } from "../../helpers/profile";
 import { get_classname } from "../../helpers/workplace";
 
 const Demo = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }));
 
-export default function SubjectsList(props) {
+export default function ClassesList(props) {
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
   const [workplaces, setWorkplaces] = React.useState(null);
   useEffect(() => {
-    get_student_workplaces(props.profile?.id).then(w => {
+    get_teacher_workplaces(props.profile?.id).then(w => {
       setWorkplaces(w);
     })
   }, [props.profile]);
@@ -33,7 +33,7 @@ export default function SubjectsList(props) {
   return (
     <Box sx={{ flexGrow: 1, mr: 2 }}>
       <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-          Your subjects and teachers
+        Classes you teach
       </Typography>
       <Demo>
         <List dense={dense}>
@@ -43,8 +43,8 @@ export default function SubjectsList(props) {
                 <SchoolIcon />
               </ListItemIcon>
               <ListItemText
-                primary={`${workplace.subject_name} ${get_classname(workplace)}`}
-                secondary={`${workplace.teacher_position} ${profile_fullname(workplace)}`}
+                primary={`${get_classname(workplace)}`}
+                secondary={`${workplace.subject_name}`}
               />
             </ListItem>
           ) : <>{typeof(workplaces)}</>}

@@ -1,4 +1,4 @@
-import { SET_USER } from './actions';
+import { SET_USER, REMOVE_USER } from './actions';
 
 export default (state = {}, action) => {
     switch (action.type) {
@@ -7,6 +7,11 @@ export default (state = {}, action) => {
                 ...state,
                 profile: action.profile,
             };
+        case REMOVE_USER:
+            return {
+                ...state,
+                profile: null
+            }
         default:
             return state;
     }

@@ -20,7 +20,7 @@ const LoginPage = ({ profile, loginAction }) => {
     return (
         <div className="login_page">
             {profile
-                ? <Redirect to={{ path: '/login' }} />
+                ? <Redirect to={{ path: '/' }} />
                 : (
                     <form onSubmit={event => {
                         event.preventDefault();

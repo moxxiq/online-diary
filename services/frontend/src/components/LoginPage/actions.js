@@ -1,7 +1,9 @@
 
-export const SET_USER = 'DIARY:SET_USER';
+import { TOKEN_COOKIE, getAccessTokenFromCookie, eraseCookie } from '../../helpers/auth'
 
-export const TOKEN_COOKIE = 'Authorization';
+export const SET_USER = 'DIARY:SET_USER';
+export const REMOVE_USER = 'DIARY:REMOVE_USER';
+
 
 export const loginAction = (creds, history) => async (dispatch, getRootState) => {
     const resp = await fetch('https://online-diary-mathape.herokuapp.com/api/v1/auth/token', {
@@ -18,26 +20,12 @@ export const loginAction = (creds, history) => async (dispatch, getRootState) =>
     await loadUserProfile(history)(dispatch, getRootState);
 };
 
-const getAccessTokenFromCookie = data => {
-    const start = data.indexOf(`${TOKEN_COOKIE}=`);
-    if (start < 0) {
-        return null;
-    }
-    let end = data.indexOf(';', start);
-    if (end < 1) {
-        end = undefined;
-    }
-    return data.substring(start + TOKEN_COOKIE.length + 1, end);
-}
-
 export const loadUserProfile = history => async (dispatch, _getRootState) => {
-    const cookies = document.cookie;
-    const token = getAccessTokenFromCookie(cookies);
+    const token = getAccessTokenFromCookie();
     if (!token) {
         history.push('/login');
         return;
     }
-    console.log(token);
 
     const resp = await fetch('https://online-diary-mathape.herokuapp.com/api/v1/users/me', {
         method: 'GET',
@@ -47,7 +35,20 @@ export const loadUserProfile = history => async (dispatch, _getRootState) => {
     });
 
     const profile = await resp.json();
-    console.log(profile);
 
     dispatch({ type: SET_USER, profile });
+};
+
+
+export const logoutAction = (history) => async (dispatch, getRootState) => {
+    eraseCookie(TOKEN_COOKIE);
+    await removeUserProfile(history)(dispatch, getRootState);
+};
+
+export const removeUserProfile = history => async (dispatch, _getRootState) => {
+    const token = getAccessTokenFromCookie();
+    if (!token) {
+        console.log('Logged out, token: ', token);
+    }
+    dispatch({ type: REMOVE_USER });
 };

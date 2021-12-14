@@ -10,7 +10,7 @@ import ResponsiveAppBar from './components/ResponsiveAppBar'
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ResponsiveAppBar/>
+      {/* <ResponsiveAppBar/> */}
       <Routing />
     </Provider>
   </React.StrictMode>,
