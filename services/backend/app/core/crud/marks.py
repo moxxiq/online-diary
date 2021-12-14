@@ -11,3 +11,13 @@ async def post(payload: Mark):
 async def get(id: int):
     query = marks.select().where(id == marks.c.id)
     return await database.fetch_one(query=query)
+
+async def delete(id: int):
+    query = marks.delete().where(id == marks.c.id)
+    return await database.execute(query=query)
+
+async def get_by_work_student(work_id: int, student_id: int):
+    query = (
+        marks.select().where((work_id == marks.c.work_id) & (student_id == marks.c.student_id))
+    )
+    return await database.fetch_one(query=query)
