@@ -1,6 +1,7 @@
 from app.core.schemas.classes import Class
 from app.db import database
 from app.core.models.classes import classes
+from app.core.models.students import students
 from fastapi.encoders import jsonable_encoder
 
 
@@ -15,3 +16,13 @@ async def get(id: int):
 async def get_by_attrs(payload: Class):
     query = classes.select().where((payload.name == classes.c.name) & (payload.number == classes.c.number))
     return await database.fetch_one(query=query)
+
+async def if_student_in_class(student_id: int, class_id: int):
+    query = (
+        students
+        .select()
+        .where(
+         ( (student_id == students.c.user_id) & (class_id == students.c.class_id) ).exists() )
+        .scalar()
+    )
+    return await database.fetch_val(query=query)

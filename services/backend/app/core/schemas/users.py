@@ -14,6 +14,8 @@ class User(BaseModel):
 class NewUser(User):
     password: str = Field(...)
 
-class UserInDB(User):
+class UserWithID(User):
     id: int = Field(...)
+
+class UserInDB(UserWithID):
     hashed_password: str = Field(...)
