@@ -10,7 +10,7 @@ from . import (
     workplaces,
     work_types,
     works,
-
+    marks,
 )
 
 from fastapi import APIRouter
@@ -19,12 +19,13 @@ all = APIRouter()
 
 all.include_router(ping.router)
 all.include_router(notes.router, prefix="/notes", tags=["notes"])
-all.include_router(authorization.router, prefix="/auth", tags=["auth"])
-all.include_router(users.router, prefix="/users", tags=["users"])
-all.include_router(teachers.router, prefix="/teachers", tags=["teachers"])
-all.include_router(classes.router, prefix="/classes", tags=["classes"])
-all.include_router(students.router, prefix="/students", tags=["students"])
-all.include_router(subjects.router, prefix="/subjects", tags=["subjects"])
-all.include_router(workplaces.router, prefix="/workplaces", tags=["workplaces"])
-all.include_router(work_types.router, prefix="/work_types", tags=["work_types"])
-all.include_router(works.router, tags=["works"])
+all.include_router(authorization.router, prefix="/auth", tags=["Auth"])
+all.include_router(users.router, prefix="/users", tags=["Users"])
+all.include_router(teachers.router, prefix="/teachers", tags=["Teachers"])
+all.include_router(classes.router, prefix="/classes", tags=["Classes"])
+all.include_router(students.router, tags=["Students"])
+all.include_router(subjects.router, prefix="/subjects", tags=["Subjects"])
+all.include_router(workplaces.router, prefix="/workplaces", tags=["Workplaces"])
+all.include_router(work_types.router, prefix="/work_types", tags=["Work_types"])
+all.include_router(works.router, tags=["Works"])
+all.include_router(marks.router, tags=["Marks"])

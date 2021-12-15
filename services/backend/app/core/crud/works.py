@@ -1,8 +1,11 @@
 from app.core.schemas.works import Work, WorkContent
 from app.db import database
 from app.core.models.works import works
+from app.core.models.workplaces import workplaces
+from app.core.models.teachers import teachers
 from fastapi.encoders import jsonable_encoder
 
+import sqlalchemy as sa
 
 async def post(payload: Work):
     payload_dict = payload.dict()
@@ -38,3 +41,34 @@ async def get_all_workplace_works(workplace_id: int):
         .where(workplace_id == works.c.workplace_id)
     )
     return await database.fetch_all(query=query)
+
+async def get_all_workplace_work_type_works(workplace_id: int, work_type_id: int):
+    query = (
+        works
+        .select()
+        .where((workplace_id == works.c.workplace_id)
+               & (work_type_id == works.c.work_type_id))
+    )
+    return await database.fetch_all(query=query)
+
+async def get_all_class_work_type_works(class_id: int, work_type_id: int):
+    query = (
+        sa.select(works.c.id, works.c.workplace_id, works.c.work_type_id, works.c.deadline,
+                  works.c.headline, works.c.description, works.c.creation_date,
+                  workplaces.c.class_id)
+        .select_from(workplaces
+                     .join(works, workplaces.c.id == works.c.workplace_id))
+        .where((class_id == workplaces.c.class_id)
+               & (work_type_id == works.c.work_type_id))
+    )
+    return await database.fetch_all(query=query)
+
+async def get_teacher_of_the_work(work_id: int):
+    query = (
+        sa.select(teachers.c.user_id, teachers.c.position, )
+            .select_from(workplaces
+                         .join(works, workplaces.c.id == works.c.workplace_id)
+                         .join(teachers, teachers.c.user_id == workplaces.c.teacher_id))
+            .where((work_id == works.c.id))
+    )
+    return await database.fetch_one(query=query)
