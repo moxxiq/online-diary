@@ -6,7 +6,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from app.core.models import (
-    notes, users, teachers, subjects, work_types, classes, students,
+    users, teachers, subjects, work_types, classes, students,
     workplaces, works, marks
 )
 
@@ -24,7 +24,7 @@ config.set_main_option('sqlalchemy.url', DATABASE_URL)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = [
-    notes.metadata, users.metadata, teachers.metadata, subjects.metadata,
+    users.metadata, teachers.metadata, subjects.metadata,
     work_types.metadata, classes.metadata, students.metadata, workplaces.metadata,
     works.metadata, marks.metadata,
 ]
