@@ -1,5 +1,4 @@
 from . import (
-    notes,
     ping,
     authorization,
     users,
@@ -18,7 +17,6 @@ from fastapi import APIRouter
 all = APIRouter()
 
 all.include_router(ping.router)
-all.include_router(notes.router, prefix="/notes", tags=["notes"])
 all.include_router(authorization.router, prefix="/auth", tags=["Auth"])
 all.include_router(users.router, prefix="/users", tags=["Users"])
 all.include_router(teachers.router, prefix="/teachers", tags=["Teachers"])
