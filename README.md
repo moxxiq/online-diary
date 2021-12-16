@@ -1,97 +1,98 @@
 # Online Diary
+**Backend •** [![Heroku Status](https://gitlab.com/MathApe/online-diary/badges/main/pipeline.svg?style=flat-square)](https://gitlab.com/MathApe/online-diary/-/commits/main)
+
 **Frontend •** [![Netlify Status](https://api.netlify.com/api/v1/badges/4a7c60c4-0532-48d7-b160-f7bf4a75166d/deploy-status)](https://app.netlify.com/sites/online-diary-mathape/deploys)
 
-**Backend •** [![Heroku Status](https://gitlab.com/MathApe/online-diary/badges/main/pipeline.svg?style=flat-square)](https://gitlab.com/MathApe/online-diary/-/commits/main)
-## How to run locally
-### Step 1. Clone the repository with:
+## Description
+Online diary for teachers and students to collaborate.
+Make and do different types of works, group students by classes etc
 
+> TODO: put FR (and NFR) here if needed, features
+
+## Visuals
+Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+
+### Database structure
+![Database structure](blob/img/db.png)
+
+### [API structure](https://online-diary-mathape.herokuapp.com/api/v1/docs) in [OpenAPI Specification](https://swagger.io/specification/)
+![Database structure](blob/img/APIdocs.png)
+
+## Installation
+### To launch this service local you need to
+#### 1. Clone the repository
 ```bash
 git clone git@gitlab.com:MathApe/online-diary.git
 cd online-diary
 ```
+#### 2. Install docker and docker compose for your system
+https://docs.docker.com/engine/install/
 
-### Step 2. Run all services via:
+https://docs.docker.com/compose/install/
+
+#### 3. Build and run all services
 
 ```bash
-docker-compose -f docker-compose-local.yaml up --build
+docker-compose -f docker-compose-local.yaml up --build --detach
 ```
 
-Tip: to rebuild only 1 service you need to
+> **If this is your first time, please run database migrations**
+> ```bash
+> docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
+> ```
+> And rerun docker-compose
+> ```bash
+> docker-compose -f docker-compose-local.yaml up --build
+> ```
+
+## Develop
+
+### To rebuild only 1 service you need to
 ```bash
 docker-compose -f docker-compose-local.yaml up --detach --build {service-name}
 ```
 
-## To run tests execute
+### To run tests execute
 ```bash
 docker-compose -f docker-compose-local.yaml exec backend pytest
 ```
 
-## To run DB migration
+### To run DB migration
 ```bash
 docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
 ```
-### To run second migration
+### To run migration after structure change
 ```bash
 docker-compose -f docker-compose-local.yaml exec backend alembic revision --autogenerate -m "Add a column" 
 ```
-And change owner of the files if it is needed
+Change owner of the files if it is needed
 ```bash
 docker-compose -f docker-compose-local.yaml exec backend chown -R 1000:1000 migrations
 ```
-Edit the file `online-diary/services/backend/migrations/versions/b54somehash14_add_a_column.py` to correct the migration
+Edit the file ```online-diary/services/backend/migrations/versions/b54somehash14_add_a_column.py```
+or just a new file with corresponding name to correct the migration
 
-Run again to head
+Run again migration to head
 ```bash
 docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
 ```
 > **WARNING**: If you add a new model, put its metatada into `target_metadata` in file `services/backend/migrations/env.py`
 
-## Database structure
-![Database structure](blob/img/db.png)
-# TODO: Gitlab readme template fill
-
-***
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://gitlab.com/-/experiment/new_project_readme_content:52a4d717ba3eca3d81f3c100462513c0?https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+If you find this repository useful and want to improve it - just fork it.
 
 ## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Authors: Dmytro Bubela, Nazar Havryliuk, Oliinyk Maiia, Nadiia Tolstukha
 
 ## License
-For open source projects, say how it is licensed.
+This project is licensed under the terms of the [MIT license](LICENSE).
 
 ## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+> **WARNING**: Not ready for production, vulnerable to CSRF attacks
+
+Project was made for University course, probably will have no further updates after the passing
 
