@@ -64,3 +64,23 @@ async def get_all_class_work_type_works(class_id: int, work_type_id: int, curren
                                                       class_id=class_id):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Student is not in this class")
     return await crud.works.get_all_class_work_type_works(class_id, work_type_id)
+
+@router.get("/workplace/{workplace_id}/journal/works/",)
+async def get_all_workplace_teacher_works_marked(workplace_id: int, current_user: UserWithID = Depends(get_current_user_with_scopes([1, 2]))):
+    workplace_in_db = await crud.workplaces.get(workplace_id)
+    if not workplace_in_db:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Workplace not found")
+    if (current_user.get("type") == 2) and (workplace_in_db.get("teacher_id") != current_user.get("id")):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You can't see other teacher journal")
+    return [work async for work in crud.works.get_all_workplace_teacher_works_marked(workplace_id=workplace_id)]
+
+@router.get("/workplace/{workplace_id}/diary/works/",)
+async def get_all_workplace_student_works_marked(workplace_id: int, current_user: UserWithID = Depends(get_current_user_with_scopes([1, 2, 3]))):
+    workplace_in_db = await crud.workplaces.get(workplace_id)
+    if not workplace_in_db:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Workplace not found")
+    if (current_user.get("type") == 2) and (workplace_in_db.get("teacher_id") != current_user.get("id")):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You can't see other students diaries")
+    if (current_user.get("type") == 3) and (not crud.classes.if_student_in_class(student_id=current_user.get("id"), class_id=workplace_in_db.get("class_id"))):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You can't see other students diaries")
+    return [work async for work in crud.works.get_all_workplace_student_works_marked(workplace_id=workplace_id, student_id=current_user.get("id"))]

@@ -2,7 +2,11 @@ from app.core.schemas.works import Work, WorkContent
 from app.db import database
 from app.core.models.works import works
 from app.core.models.workplaces import workplaces
+from app.core.models.users import users
 from app.core.models.teachers import teachers
+from app.core.models.students import students
+from app.core.models.classes import classes
+from app.core.models.marks import marks
 from fastapi.encoders import jsonable_encoder
 
 import sqlalchemy as sa
@@ -72,3 +76,39 @@ async def get_teacher_of_the_work(work_id: int):
             .where((work_id == works.c.id))
     )
     return await database.fetch_one(query=query)
+
+async def get_all_workplace_teacher_works_marked(workplace_id):
+    works_by_workplace = await get_all_workplace_works(workplace_id)
+    for work in works_by_workplace:
+        query = (
+            sa.select(marks.c.id.label("mark_id"), marks.c.creation_date, marks.c.comment, marks.c.mark,
+                      students.c.user_id.label("student_id"),
+                      users.c.surname, users.c.name, users.c.midname,
+                     )
+                .select_from(workplaces
+                             .join(classes, workplaces.c.class_id == classes.c.id)
+                             .join(students, classes.c.id == students.c.class_id)
+                             .join(marks, (students.c.user_id == marks.c.student_id), isouter=True)
+                             .join(users, students.c.user_id == users.c.id)
+                             )
+                .where((workplace_id == workplaces.c.id)
+                        & (work.get("id") == marks.c.work_id)
+                       )
+        )
+        marks_and_details = await database.fetch_all(query=query)
+        yield dict(**dict(work), marks=marks_and_details)
+
+
+async def get_all_workplace_student_works_marked(workplace_id, student_id):
+    works_by_workplace = await get_all_workplace_works(workplace_id)
+    for work in works_by_workplace:
+        query = (
+            marks
+            .select()
+            .where(
+                (marks.c.student_id == student_id)
+                & (marks.c.work_id == work.get("id"))
+            )
+        )
+        marks_and_details = await database.fetch_all(query=query)
+        yield dict(**dict(work), marks=marks_and_details)
