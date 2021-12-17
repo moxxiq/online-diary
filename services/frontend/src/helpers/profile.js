@@ -1,4 +1,3 @@
-import { exp } from "prelude-ls";
 import { getAccessTokenFromCookie } from './auth'
 export const profile_fullname = (profile, short = false) => {
   if (short) {
