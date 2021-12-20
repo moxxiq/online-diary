@@ -5,6 +5,8 @@ services:
     build:
       context: ./services/backend
       dockerfile: Dockerfile
+    depends_on:
+      - db
     command: |
       bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port ${PORT:-8000}'
 #      bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; gunicorn -w 6 -k uvicorn.workers.UvicornWorker --reload --bind 0.0.0.0:${PORT:-8000} app.main:app'
@@ -27,6 +29,8 @@ services:
     build:
       context: ./services/frontend
       dockerfile: Dockerfile
+    depends_on:
+      - backend
     volumes:
       - './services/frontend:/frontend'
       - './services/frontend/node_modules:/frontend/node_modules'
