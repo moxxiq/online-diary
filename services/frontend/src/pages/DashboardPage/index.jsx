@@ -18,8 +18,9 @@ import {
 } from "../../helpers/profile";
 
 import { get_workplace_str } from "../../helpers/workplace";
+import { Typography } from "@mui/material";
 
-const DashboardPage = ({ profile, currentWorkplace }) => {
+const DashboardPage = ({ profile, currentWorkplace, setCurrentWorkplace }) => {
   const [workplaces, setWorkplaces] = useState([]);
 
   useEffect(() => {
@@ -45,6 +46,17 @@ const DashboardPage = ({ profile, currentWorkplace }) => {
     console.log({ workplaces });
   }, [profile]);
 
+
+  useEffect(() => {
+
+    console.log({ currentWorkplace });
+    if(currentWorkplace === undefined){
+      if(workplaces){
+        setCurrentWorkplace(workplaces[0]?.id)
+      }
+    }
+  }, [currentWorkplace, workplaces]);
+
   return (
     <Container maxWidth="sl">
       <Box
@@ -60,8 +72,9 @@ const DashboardPage = ({ profile, currentWorkplace }) => {
           options={workplaces}
           getOptionLabel={(option) => get_workplace_str(option)}
           renderInput={(params) => (
-            <TextField {...params} label="Highlights" margin="normal" />
+            <TextField {...params} label="Choose workplace" margin="normal" />
           )}
+          onChange={(event, value) => value?.id ? setCurrentWorkplace(value.id) : console.log('Choose from list')} // prints the selected value
           renderOption={(props, option, { inputValue }) => {
             const matches = match(get_workplace_str(option), inputValue);
             const parts = parse(get_workplace_str(option), matches);
@@ -84,6 +97,9 @@ const DashboardPage = ({ profile, currentWorkplace }) => {
             );
           }}
         />
+        <Typography>
+          {(currentWorkplace && workplaces.length)? get_workplace_str(workplaces.find(w => w.id === currentWorkplace)) : 'Choose workplace'}
+        </Typography>
       </Box>
       {profile?.type === 2 ? <TeacherJournal /> : <StudentSubject />}
     </Container>
@@ -99,6 +115,8 @@ const mapStateToProps = (rootState) => ({
   currentWorkplace: rootState?.currentWorkplace,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  setCurrentWorkplace
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);

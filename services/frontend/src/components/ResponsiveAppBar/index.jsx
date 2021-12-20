@@ -73,7 +73,7 @@ const ResponsiveAppBar = ({ profile, logoutAction }) => {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar sx={{ bgcolor: red[400] }} aria-label="recipe">
-                  {profile?.name[0]}
+                  {profile?.name ? profile.name[0] : 'Name'}
                 </Avatar>
               </IconButton>
             </Tooltip>

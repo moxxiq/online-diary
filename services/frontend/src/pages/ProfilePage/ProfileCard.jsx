@@ -27,7 +27,7 @@ export default function ProfileCard(props) {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[400] }} aria-label="recipe">
-            {props.profile?.name[0]}
+            {props.profile?.name ? props.profile.name[0] : 'Name'}
           </Avatar>
         }
         title={ props.profile? profile_fullname(props.profile) : 'Name Secondname Midname'}

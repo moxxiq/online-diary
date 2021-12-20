@@ -5,9 +5,14 @@ export const SET_USER = 'DIARY:SET_USER';
 export const REMOVE_USER = 'DIARY:REMOVE_USER';
 export const SET_WORKPLACE = 'DIARY:SET_WORKPLACE';
 
+
 export const setCurrentWorkplace = (workplace_id) => async (dispatch, getRootState) => {
     dispatch({ type: SET_WORKPLACE, currentWorkplace: workplace_id });
 };
+
+// export const setWorkplace = (workplace_id) => async (dispatch, _getRootState) => {
+//     dispatch({ type: SET_WORKPLACE, currentWorkplace: workplace_id });
+// };
 
 
 export const loginAction = (creds, history) => async (dispatch, getRootState) => {

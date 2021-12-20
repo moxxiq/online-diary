@@ -32,7 +32,6 @@ const LoginPage = ({ profile, loginAction }) => {
                         <FormLabel>Password</FormLabel>
                         <TextField className="login_form_item"  id="filled-basic" label="Filled" variant="filled" type="password" onChange={event => setPassword(event.target.value)}/>
                         <Button className="login_form_item"  variant="contained" type="button" onClick={handleLogin}>Continue</Button>
-                        <Button className="login_form_item" variant="text">Need an account? Lets create one...</Button>
                     </form>
                 )}
         </div>
