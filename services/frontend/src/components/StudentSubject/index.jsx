@@ -25,7 +25,7 @@ function StudentSubject({ profile, currentWorkplace }) {
     get_work_types().then((res_arr) => {
       let result_types = {};
       function setPlace(work_type) {
-        result_types[work_type.id] = work_type.str;
+        result_types[work_type.id] = work_type.name;
       }
       res_arr.forEach(setPlace);
       setWorkTypes(result_types);
