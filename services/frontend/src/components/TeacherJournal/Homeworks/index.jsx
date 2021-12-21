@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -13,15 +14,23 @@ import SportsScoreIcon from "@mui/icons-material/SportsScore";
 import GradeIcon from "@mui/icons-material/Grade";
 import BorderAllIcon from "@mui/icons-material/BorderAll";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { get_workplace_student, get_work_types } from "../../helpers/workplace";
-import { parse_date } from "../../helpers/other";
 import { connect } from "react-redux";
 
-function StudentSubject({ profile, currentWorkplace }) {
-  const [expanded, setExpanded] = React.useState(false);
-  const [works, setWorks] = React.useState([]);
-  const [work_types, setWorkTypes] = React.useState({});
-  React.useEffect(() => {
+import GradeForm from "./GradeForm";
+
+import {
+  get_workplace_teacher,
+  get_work_types,
+} from "../../../helpers/workplace";
+import { parse_date } from "../../../helpers/other";
+
+function Homeworks({ profile, currentWorkplace }) {
+  const [expanded, setExpanded] = useState(false);
+  const [works, setWorks] = useState([]);
+  const [work_types, setWorkTypes] = useState({});
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
     get_work_types().then((res_arr) => {
       let result_types = {};
       function setPlace(work_type) {
@@ -30,14 +39,18 @@ function StudentSubject({ profile, currentWorkplace }) {
       res_arr.forEach(setPlace);
       setWorkTypes(result_types);
     });
-    get_workplace_student(currentWorkplace).then(setWorks);
-    console.log({ works, work_types });
+    get_workplace_teacher(currentWorkplace).then(setWorks);
+    setTimeout(console.log({ works, work_types }), 3000);
   }, [currentWorkplace]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+    setTimeout(console.log({ works, work_types }), 1000);
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
   return (
     <div>
       {Array.isArray(works) ? (
@@ -55,13 +68,8 @@ function StudentSubject({ profile, currentWorkplace }) {
               <Typography sx={{ width: "33%", flexShrink: 0 }}>
                 {work.headline}
               </Typography>
-              <Typography sx={{ color: "text.secondary" }}>
-                {work.description}
-              </Typography>
-              <Typography sx={{ color: "text.secondary", ml: "150px" }}>
-                {work.marks.length
-                  ? `Оцінка: ${work.marks[0].mark}`
-                  : "Не виставлено"}
+              <Typography sx={{ color: "text.secondary", ml: "250px" }}>
+                {`Дедлайн: ${parse_date(work.deadline)}`}
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -79,8 +87,8 @@ function StudentSubject({ profile, currentWorkplace }) {
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
-                    primary="Вид роботи"
-                    secondary={work_types[work.work_type_id]}
+                    primary={work_types[work.work_type_id]}
+                    secondary={`Опис: ${work.description}`}
                   />
                 </ListItem>
                 <ListItem>
@@ -96,21 +104,9 @@ function StudentSubject({ profile, currentWorkplace }) {
                     )} -- ${parse_date(work.deadline)}`}
                   />
                 </ListItem>
-                {work.marks.length ? (
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <GradeIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={parse_date(work.marks[0].creation_date)}
-                      secondary={`Коментар: ${work.marks[0].comment}`}
-                    />
-                  </ListItem>
-                ) : (
-                  ""
-                )}
+                <ListItem>
+                  <Button variant="text" onClick={handleClickOpen}>Виставити оцінку</Button>
+                </ListItem>
               </List>
             </AccordionDetails>
           </Accordion>
@@ -118,9 +114,15 @@ function StudentSubject({ profile, currentWorkplace }) {
       ) : (
         <>{typeof works}</>
       )}
+      <GradeForm { ...{currentWorkplace, open, setOpen} } />
     </div>
   );
 }
+
+// secondary={`Оцінки: ${work.marks[0].comment}`}
+// primary={parse_date(work.marks[0].creation_date)}
+// secondary={`Оцінки: ${work.marks[0].comment}`}
+// work.marks.length ? "" : ""}
 
 const mapStateToProps = (rootState) => ({
   profile: rootState?.profile,
@@ -129,4 +131,4 @@ const mapStateToProps = (rootState) => ({
 
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(StudentSubject);
+export default connect(mapStateToProps, mapDispatchToProps)(Homeworks);

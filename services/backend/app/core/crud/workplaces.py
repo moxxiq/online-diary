@@ -47,7 +47,7 @@ async def get_all_student_workplaces_with_details(student_id: int):
     )
     return await database.fetch_all(query=query)
 
-async def get_all_teachers_workplaces_with_details(teacher_id: int):
+async def get_all_teacher_workplaces_with_details(teacher_id: int):
     query = (
         sa.select(subjects.c.id.label("subject_id"), subjects.c.name.label("subject_name"),
                   classes.c.id.label("class_id"), classes.c.name.label("class_name"), classes.c.number.label("class_number"),

@@ -33,7 +33,7 @@ export default function ClassesList(props) {
   return (
     <Box sx={{ flexGrow: 1, mr: 2 }}>
       <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-        Classes you teach
+        Класи, де ви викладаєте
       </Typography>
       <Demo>
         <List dense={dense}>
