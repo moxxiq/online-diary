@@ -7,11 +7,6 @@
 Online diary for teachers and students to collaborate.
 Make and do different types of works, group students by classes etc
 
-> TODO: put FR (and NFR) here if needed, features
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
 ### Database structure
 ![Database structure](blob/img/db.png)
 
@@ -80,7 +75,7 @@ docker-compose -f docker-compose-local.yaml exec backend alembic upgrade head
 
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Install, play with admin user, credentials of which must be in environment variables.
 
 ## Contributing
 If you find this repository useful and want to improve it - just fork it.
