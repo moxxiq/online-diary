@@ -20,8 +20,8 @@ import { logoutAction } from "../LoginPage/actions";
 import { redirect } from "statuses";
 import { profile_fullname } from "../../helpers/profile";
 
-const pages = ["Profile", "Dashboard"];
-const settings = ["Profile", "Dashboard", "Logout"];
+const pages = ["Профіль", "Контроль"];
+const settings = ["Профіль", "Контроль", "Вийти з додатку"];
 
 const ResponsiveAppBar = ({ profile, logoutAction }) => {
   const history = useHistory();
@@ -34,13 +34,13 @@ const ResponsiveAppBar = ({ profile, logoutAction }) => {
 
   const handleCloseNavMenu = (setting) => {
     switch (setting) {
-      case "Profile":
+      case "Профіль":
         history.push("/");
         break;
-      case "Dashboard":
+      case "Контроль":
         history.push("/dashboard");
         break;
-      case "Logout":
+      case "Вийти з додатку":
         logoutAction(history);
         break;
     }

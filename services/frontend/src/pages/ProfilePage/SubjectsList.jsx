@@ -33,7 +33,7 @@ export default function SubjectsList(props) {
   return (
     <Box sx={{ flexGrow: 1, mr: 2 }}>
       <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-          Your subjects and teachers
+          Ваші предмети та вчителі
       </Typography>
       <Demo>
         <List dense={dense}>
