@@ -13,7 +13,7 @@ async def create_marks(payload: Mark, current_user: UserWithID = Depends(get_cur
     mark_in_db = await crud.marks.get_by_work_student(work_id=payload.work_id, student_id=payload.student_id)
     if mark_in_db:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Mark is already set")
-    if (current_user.get("type") == 2) and (current_user.get("id") != await crud.works.get_teacher_of_the_work(payload.work_id).get("user_id")):
+    if (current_user.get("type") == 2) and (current_user.get("id") != (await crud.works.get_teacher_of_the_work(payload.work_id)).get("user_id")):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Teacher is not allowed to set the marks for other teacher works")
     mark_id = await crud.marks.post(payload)
