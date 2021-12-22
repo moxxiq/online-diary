@@ -21,7 +21,7 @@ export const type_to_str = (n) => {
 
 export const get_student_workplaces = async (user_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/workplaces/students/${user_id}/workplaces/detailed/`,
+    `https://online-diary-mathape.herokuapp.com/api/v1/workplaces/students/${user_id}/workplaces/detailed`,
     {
       method: "GET",
       headers: {
@@ -34,7 +34,7 @@ export const get_student_workplaces = async (user_id) => {
 
 export const get_teacher_workplaces = async (user_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/workplaces/teachers/${user_id}/workplaces/detailed/`,
+    `https://online-diary-mathape.herokuapp.com/api/v1/workplaces/teachers/${user_id}/workplaces/detailed`,
     {
       method: "GET",
       headers: {
