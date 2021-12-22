@@ -8,8 +8,7 @@ from app.core.schemas.subjects import Subject, SubjectDB
 router = APIRouter()
 
 
-
-@router.post("/", response_model=SubjectDB, status_code=status.HTTP_201_CREATED)
+@router.post("/subjects", response_model=SubjectDB, status_code=status.HTTP_201_CREATED)
 async def create_subject(payload: Subject, current_user: UserWithID = Depends(get_current_user_with_scopes([1, 2]))):
     subject_in_db = await crud.subjects.get_by_attrs(payload)
     if subject_in_db:
@@ -18,7 +17,7 @@ async def create_subject(payload: Subject, current_user: UserWithID = Depends(ge
     response_object = await crud.subjects.get(subject_id)
     return response_object
 
-@router.get("/{id}/", response_model=SubjectDB)
+@router.get("/subjects/{id}", response_model=SubjectDB)
 async def read_subject(id: int = Path(..., gt=0), user: UserWithID = Depends(get_current_user)):
     subject_in_db = await crud.subjects.get(id)
     if not subject_in_db:
