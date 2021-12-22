@@ -30,7 +30,7 @@ async def read_marks(id: int = Path(..., gt=0), current_user: UserWithID = Depen
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Student is not allowed to see the marks of others")
     if (current_user.get("id") != (await crud.works.get_teacher_of_the_work(mark_in_db.get("work_id"))).get("user_id")) and (current_user.get("type") == 2):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                            detail="Techer is not allowed to see the marks of other teachers")
+                            detail="Teacher is not allowed to see the marks of other teachers")
     return mark_in_db
 
 @router.delete("/marks/{id}/", response_model=MarkDB)
