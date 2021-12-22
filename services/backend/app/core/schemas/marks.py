@@ -4,11 +4,13 @@ from decimal import Decimal
 
 from pydantic import BaseModel, Field
 
-class Mark(BaseModel):
-    student_id: int = Field(..., gt=0)
-    work_id: int = Field(..., gt=0)
+class MarkContent(BaseModel):
     mark: Decimal
     comment: Optional[str]
+
+class Mark(MarkContent):
+    student_id: int = Field(..., gt=0)
+    work_id: int = Field(..., gt=0)
 
 class MarkDB(Mark):
     id: int = Field(..., gt=0)
