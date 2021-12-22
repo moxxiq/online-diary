@@ -13,7 +13,7 @@ import SportsScoreIcon from "@mui/icons-material/SportsScore";
 import GradeIcon from "@mui/icons-material/Grade";
 import BorderAllIcon from "@mui/icons-material/BorderAll";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { get_workplace_student, get_work_types } from "../../helpers/workplace";
+import { get_works_student, get_work_types } from "../../helpers/workplace";
 import { parse_date } from "../../helpers/other";
 import { connect } from "react-redux";
 
@@ -30,7 +30,7 @@ function StudentSubject({ profile, currentWorkplace }) {
       res_arr.forEach(setPlace);
       setWorkTypes(result_types);
     });
-    get_workplace_student(currentWorkplace).then(setWorks);
+    get_works_student(currentWorkplace).then(setWorks);
     console.log({ works, work_types });
   }, [currentWorkplace]);
 

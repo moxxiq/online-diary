@@ -14,24 +14,29 @@ import Select from "@mui/material/Select";
 import {
   get_workplace,
   get_students_from_class,
-  editMark,
+  createWork
 } from "../../../helpers/workplace";
 
-export default function GradeForm({
+export default function WorkForm({
   currentWorkplace,
-  open,
-  setOpen,
+  openWork,
+  setOpenWork,
+  openWorkType,
   work_id_form,
 }) {
-  //   const [open, setOpen] = React.useState(false);
   const [student_id, setStudent] = useState(null);
   const [mark, setMark] = useState(null);
   const [comment, setComment] = useState("");
+  
+  const [headline, setHeadline] = useState("Назва роботи");
+  const [deadline, setDeadline] = useState(null);
+  const [work_type_id, setWorkTypeId] = useState(0);
+  const [description, setDescription] = useState("Опис роботи");
 
   const [students, setStudents] = useState([]);
 
   const request_data = () => ({
-    work_id: work_id_form,
+    work_type_id: work_id_form,
     student_id,
     mark,
     comment,
@@ -53,24 +58,24 @@ export default function GradeForm({
     get_workplace(currentWorkplace).then((res) => {
       get_students_from_class(res.class_id).then(setStudents);
     });
-  }, [open, currentWorkplace]);
+  }, [openWork, currentWorkplace]);
 
   const handleClose = (event, reason) => {
     console.log({ student_id, mark, comment, students });
 
     if (reason === "submit") {
-      editMark(request_data()).then((res) => console.log(res));
+      // postData(request_data()).then((res) => console.log(res));
       // request_data
     }
 
     if (reason !== "backdropClick") {
-      setOpen(false);
+      setOpenWork(false);
     }
   };
 
   return (
-    <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-      <DialogTitle>Оцінити роботу</DialogTitle>
+    <Dialog disableEscapeKeyDown open={openWork} onClose={handleClose}>
+      <DialogTitle>Створити роботу</DialogTitle>
       <DialogContent>
         <Box
           component="form"
@@ -112,7 +117,7 @@ export default function GradeForm({
               value={comment || ""}
               fullWidth
               label="Коментар"
-              inputProps={{ inputMode: "text", maxLength: 50 }}
+              inputProps={{inputMode: "text", maxLength: 50}}
             />
           </FormControl>
         </Box>
