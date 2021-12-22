@@ -19,7 +19,7 @@ export const get_workplace_str = (workplace) => {
 
 export const get_works = async (workplace_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/workplaces/${workplace_id}/works/`,
+    `https://online-diary-mathape.herokuapp.com/api/v1/workplaces/${workplace_id}/works`,
     {
       method: "GET",
       headers: {
@@ -32,7 +32,7 @@ export const get_works = async (workplace_id) => {
 
 export const get_mark = async (work_id, student_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/works/${work_id}/students/${student_id}/marks/`,
+    `https://online-diary-mathape.herokuapp.com/api/v1/works/${work_id}/students/${student_id}/marks`,
     {
       method: "GET",
       headers: {
@@ -45,7 +45,7 @@ export const get_mark = async (work_id, student_id) => {
 
 export const get_work_types = async () => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/work_types/`,
+    `https://online-diary-mathape.herokuapp.com/api/v1/work_types`,
     {
       method: "GET",
       headers: {
@@ -56,9 +56,9 @@ export const get_work_types = async () => {
   return result.json();
 };
 
-export const get_workplace_student = async (workplace_id) => {
+export const get_works_student = async (workplace_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/workplace/${workplace_id}/diary/works/`,
+    `https://online-diary-mathape.herokuapp.com/api/v1/workplace/${workplace_id}/diary/works`,
     {
       method: "GET",
       headers: {
@@ -69,9 +69,9 @@ export const get_workplace_student = async (workplace_id) => {
   return result.json();
 };
 
-export const get_workplace_teacher = async (workplace_id) => {
+export const get_works_teacher = async (workplace_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/workplace/${workplace_id}/journal/works/`,
+    `https://online-diary-mathape.herokuapp.com/api/v1/workplace/${workplace_id}/journal/works`,
     {
       method: "GET",
       headers: {
@@ -82,33 +82,30 @@ export const get_workplace_teacher = async (workplace_id) => {
   return result.json();
 };
 
-export const get_students_from_workplace = async (workplace_id) => {
-  let data = await (
-    await fetch(
-      `https://online-diary-mathape.herokuapp.com/api/v1/workplaces/${workplace_id}/`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAccessTokenFromCookie()}`,
-        },
-      }
-    )
-  ).json();
+export const get_workplace = async (workplace_id) => {
+  const result = await fetch(
+    `https://online-diary-mathape.herokuapp.com/api/v1/workplaces/${workplace_id}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+      },
+    }
+  );
+  return result.json();
+};
 
-  console.log({ data });
-  let result = (
-    await fetch(
-      `https://online-diary-mathape.herokuapp.com/api/v1/classes/${data.class_id}/students/`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAccessTokenFromCookie()}`,
-        },
-      }
-    )
-  ).json();
-  console.log({ result });
-  return result;
+export const get_students_from_class = async (class_id) => {
+  const result = await fetch(
+    `https://online-diary-mathape.herokuapp.com/api/v1/classes/${class_id}/students`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+      },
+    }
+  );
+  return result.json();
 };
 
 // export const
@@ -117,3 +114,61 @@ export const get_students_from_workplace = async (workplace_id) => {
 export const get_mark_str = (mark) => {
   return `${mark.subject_name} ${get_classname(mark)}`;
 };
+
+
+export const editMark = async (data = {}) => {
+  // Default options are marked with *
+  const response = await fetch('https://online-diary-mathape.herokuapp.com/api/v1/marks', {
+    method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+    },
+   body: JSON.stringify(data) // body data type must match "Content-Type" header
+  });
+
+  return response.json(); // parses JSON response into native JavaScript objects
+}
+
+export const createWork = async (data = {}, ) => {
+  // Default options are marked with *
+  const response = await fetch('https://online-diary-mathape.herokuapp.com/api/v1/works', {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+    },
+   body: JSON.stringify(data) // body data type must match "Content-Type" header
+  });
+
+  return response.json(); // parses JSON response into native JavaScript objects
+}
+
+export const editWork = async (work_id, data = {}) => {
+  // Default options are marked with *
+  const response = await fetch('https://online-diary-mathape.herokuapp.com/api/v1/works', {
+    method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+    },
+   id: work_id,
+   body: JSON.stringify(data) // body data type must match "Content-Type" header
+  });
+
+  return response.json(); // parses JSON response into native JavaScript objects
+}
+
+export const deleteWork = async (work_id) => {
+  // Default options are marked with *
+  const response = await fetch('https://online-diary-mathape.herokuapp.com/api/v1/works', {
+    method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+    },
+    id: work_id,
+  });
+
+  return response.json(); // parses JSON response into native JavaScript objects
+}
