@@ -1,7 +1,12 @@
+from datetime import datetime, date
+from typing import Optional
+
 from app.core.schemas.workplaces import Workplace
 from app.db import database
 from app.core.models.workplaces import workplaces
 from app.core.models.classes import classes
+from app.core.models.works import works
+from app.core.models.marks import marks
 from app.core.models.students import students
 from app.core.models.subjects import subjects
 from app.core.models.teachers import teachers
@@ -69,5 +74,29 @@ async def get_all_class_teacher_workspaces(class_id: int, teacher_id: int):
             (class_id == workplaces.c.class_id)
             & (teacher_id == workplaces.c.teacher_id)
         )
+    )
+    return await database.fetch_all(query=query)
+
+async def get_workplace_analytics_per_user_with_worktype(
+        workplace_id: int,
+        work_type_id: Optional[int] = None,
+        date_from: Optional[datetime] = datetime.combine(date(year=1970, month=1, day=1), datetime.min.time()).replace(tzinfo=None),
+        date_to: Optional[datetime] = datetime.combine(date.today(), datetime.min.time()).replace(tzinfo=None),
+    ):
+    query = (
+        sa.select(
+            marks.c.student_id,
+            sa.func.avg(marks.c.mark).label("average_mark"),
+            sa.func.count(marks.c.id).label("mark_count"),
+            )
+            .select_from(workplaces
+                         .join(works, workplaces.c.id == works.c.workplace_id)
+                         .join(marks, works.c.id == marks.c.work_id)
+                         )
+            .where((workplace_id == workplaces.c.id)
+                   & (marks.c.creation_date >= date_from)
+                   & (marks.c.creation_date <= date_to)
+                   & (work_type_id == works.c.work_type_id if work_type_id else True))
+            .group_by(marks.c.student_id)
     )
     return await database.fetch_all(query=query)
