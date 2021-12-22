@@ -22,7 +22,7 @@ async def if_student_in_class(student_id: int, class_id: int):
         students
         .select()
         .where(
-         ( (student_id == students.c.user_id) & (class_id == students.c.class_id) ).exists() )
+         ( (student_id == students.c.user_id) & (class_id == students.c.class_id) ) ).exists()
         .scalar()
     )
     return await database.fetch_val(query=query)
