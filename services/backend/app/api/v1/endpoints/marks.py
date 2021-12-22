@@ -3,7 +3,7 @@ from fastapi import APIRouter, status, HTTPException, Path, Depends
 import app.core.crud as crud
 from app.core.authorization import get_current_user, get_current_user_with_scopes
 from app.core.schemas.users import UserWithID
-from app.core.schemas.marks import Mark, MarkDB
+from app.core.schemas.marks import Mark, MarkDB, MarkContent
 
 router = APIRouter()
 
@@ -18,6 +18,24 @@ async def create_marks(payload: Mark, current_user: UserWithID = Depends(get_cur
                             detail="Teacher is not allowed to set the marks for other teacher works")
     mark_id = await crud.marks.post(payload)
     response_object = await crud.marks.get(mark_id)
+    return response_object
+
+@router.patch("/marks/{id}/", response_model=MarkDB, status_code=status.HTTP_200_OK)
+async def correct_marks(payload: MarkContent, id: int = Path(..., gt=0), current_user: UserWithID = Depends(get_current_user_with_scopes([1, 2]))):
+    # TODO: remove vulnerability so that student could get mark for work of other classes work
+    # TODO: remove vulnerability so that another teacher can correct marks of other teachers
+    await crud.marks.patch(id, payload)
+    response_object = await crud.marks.get(id)
+    return response_object
+
+@router.put("/marks/{id}/", response_model=MarkDB, status_code=status.HTTP_200_OK)
+async def correct_or_create_marks(payload: Mark, id: int = Path(..., gt=0), current_user: UserWithID = Depends(get_current_user_with_scopes([1, 2]))):
+    # TODO: remove vulnerability so that student could get mark for work of other classes work
+    if (current_user.get("type") == 2) and (current_user.get("id") != (await crud.works.get_teacher_of_the_work(payload.work_id)).get("user_id")):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Teacher is not allowed to set the marks for other teacher works")
+    await crud.marks.put(id, payload)
+    response_object = await crud.marks.get(id)
     return response_object
 
 @router.get("/marks/{id}/", response_model=MarkDB)
