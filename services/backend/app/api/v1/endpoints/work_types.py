@@ -7,11 +7,11 @@ from app.core.schemas.work_types import WorkType, WorkTypeDB
 
 router = APIRouter()
 
-@router.get("/", response_model=list[WorkTypeDB],)
+@router.get("/work_types", response_model=list[WorkTypeDB],)
 async def read_all_work_types(user: UserWithID = Depends(get_current_user)):
     return await crud.work_types.get_all()
 
-@router.post("/", response_model=WorkTypeDB, status_code=status.HTTP_201_CREATED)
+@router.post("/work_types", response_model=WorkTypeDB, status_code=status.HTTP_201_CREATED)
 async def create_work_type(payload: WorkType, current_user: UserWithID = Depends(get_current_user_with_scopes([1, 2]))):
     work_type_in_db = await crud.work_types.get_by_attrs(payload)
     if work_type_in_db:
@@ -20,7 +20,7 @@ async def create_work_type(payload: WorkType, current_user: UserWithID = Depends
     response_object = await crud.work_types.get(work_type_id)
     return response_object
 
-@router.get("/{id}/", response_model=WorkTypeDB)
+@router.get("/work_types/{id}", response_model=WorkTypeDB)
 async def read_work_type(id: int = Path(..., gt=0), user: UserWithID = Depends(get_current_user)):
     work_type_in_db = await crud.work_types.get(id)
     if not work_type_in_db:
