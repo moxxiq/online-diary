@@ -115,60 +115,107 @@ export const get_mark_str = (mark) => {
   return `${mark.subject_name} ${get_classname(mark)}`;
 };
 
-
-export const editMark = async (data = {}) => {
+export const getMarkId = async ({ work_id, student_id }) => {
   // Default options are marked with *
-  const response = await fetch('https://online-diary-mathape.herokuapp.com/api/v1/marks', {
-    method: 'PUT', // *GET, POST, PUT, DELETE, etc.
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${getAccessTokenFromCookie()}`,
-    },
-   body: JSON.stringify(data) // body data type must match "Content-Type" header
-  });
+  const response = await fetch(
+    `https://online-diary-mathape.herokuapp.com/api/v1/works/${work_id}/students/${student_id}/marks`,
+    {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+      },
+    }
+  );
+
+  if (response.status === 404) {
+    return -1;
+  }
+
+  return (await response.json()).id; // parses JSON response into native JavaScript objects
+};
+
+export const createMark = async (data = {}) => {
+  // Default options are marked with *
+  const response = await fetch(
+    "https://online-diary-mathape.herokuapp.com/api/v1/marks",
+    {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+      },
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
+    }
+  );
 
   return response.json(); // parses JSON response into native JavaScript objects
-}
+};
 
-export const createWork = async (data = {}, ) => {
+export const editMark = async ({ id, data }) => {
   // Default options are marked with *
-  const response = await fetch('https://online-diary-mathape.herokuapp.com/api/v1/works', {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${getAccessTokenFromCookie()}`,
-    },
-   body: JSON.stringify(data) // body data type must match "Content-Type" header
-  });
+  console.log({ id, data });
+  const response = await fetch(
+    `https://online-diary-mathape.herokuapp.com/api/v1/marks/${id}`,
+    {
+      method: "PUT", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+      },
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
+    }
+  );
 
   return response.json(); // parses JSON response into native JavaScript objects
-}
+};
 
-export const editWork = async (work_id, data = {}) => {
+export const createWork = async (data = {}) => {
   // Default options are marked with *
-  const response = await fetch('https://online-diary-mathape.herokuapp.com/api/v1/works', {
-    method: 'PUT', // *GET, POST, PUT, DELETE, etc.
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${getAccessTokenFromCookie()}`,
-    },
-   id: work_id,
-   body: JSON.stringify(data) // body data type must match "Content-Type" header
-  });
+  const response = await fetch(
+    "https://online-diary-mathape.herokuapp.com/api/v1/works",
+    {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+      },
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
+    }
+  );
 
   return response.json(); // parses JSON response into native JavaScript objects
-}
+};
 
-export const deleteWork = async (work_id) => {
+export const editWork = async ({ id, data }) => {
   // Default options are marked with *
-  const response = await fetch('https://online-diary-mathape.herokuapp.com/api/v1/works', {
-    method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${getAccessTokenFromCookie()}`,
-    },
-    id: work_id,
-  });
+  const response = await fetch(
+    `https://online-diary-mathape.herokuapp.com/api/v1/works/${id}`,
+    {
+      method: "PUT", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+      },
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
+    }
+  );
 
   return response.json(); // parses JSON response into native JavaScript objects
-}
+};
+
+export const deleteWork = async (id) => {
+  // Default options are marked with *
+  const response = await fetch(
+    `https://online-diary-mathape.herokuapp.com/api/v1/works/${id}`,
+    {
+      method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAccessTokenFromCookie()}`,
+      },
+    }
+  );
+
+  return response.json(); // parses JSON response into native JavaScript objects
+};

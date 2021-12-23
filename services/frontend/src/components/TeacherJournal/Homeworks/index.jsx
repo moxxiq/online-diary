@@ -9,9 +9,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import DateRangeIcon from "@mui/icons-material/DateRange";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import SportsScoreIcon from "@mui/icons-material/SportsScore";
-import GradeIcon from "@mui/icons-material/Grade";
 import BorderAllIcon from "@mui/icons-material/BorderAll";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { connect } from "react-redux";
@@ -22,12 +22,20 @@ import WorkForm from "./WorkForm";
 import { get_works_teacher, get_work_types } from "../../../helpers/workplace";
 import { parse_date } from "../../../helpers/other";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function Homeworks({ profile, currentWorkplace }) {
   const [expanded, setExpanded] = useState(false);
   const [works, setWorks] = useState([]);
   const [work_types, setWorkTypes] = useState({});
   const [open, setOpen] = useState(false);
   const [openWork, setOpenWork] = useState(false);
+  const [openToast, setOpenToast] = useState(false);
+  const [toastSeverity, setToastSeverity] = useState("success");
+  const [toastMessage, setToastMessage] = useState("success");
+
   const [openWorkType, setOpenWorkType] = useState(""); // "CREATE", "EDIT", "DELETE"
 
   const [work_id_form, setWorkIdForm] = useState(null);
@@ -43,7 +51,7 @@ function Homeworks({ profile, currentWorkplace }) {
     });
     get_works_teacher(currentWorkplace).then(setWorks);
     setTimeout(console.log({ works, work_types }), 3000);
-  }, [currentWorkplace]);
+  }, [currentWorkplace, openWork]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -59,6 +67,36 @@ function Homeworks({ profile, currentWorkplace }) {
     setOpenWorkType(open_type);
     work_id && setWorkIdForm(work_id);
     setOpenWork(true);
+  };
+
+  const handleOpenToast = (reason) => {
+    switch (reason) {
+      case "MARK_OK":
+        setToastSeverity("success");
+        setToastMessage("Оцінка виставлена успішно!");
+        break;
+      case "WORK_OK":
+        setToastSeverity("success");
+        setToastMessage("Робота створена успішно!");
+        break;
+      case "ERROR":
+        setToastSeverity("error");
+        setToastMessage("Помилка запиту!");
+        break;
+      case "CLOSE_FORM":
+        setToastSeverity("info");
+        setToastMessage("Ви відмінили зміни у формі");
+        break;
+    }
+    setOpenToast(true);
+  };
+
+  const handleCloseToast = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenToast(false);
   };
 
   return (
@@ -129,15 +167,39 @@ function Homeworks({ profile, currentWorkplace }) {
       ) : (
         <>{typeof works}</>
       )}
-      <GradeForm {...{ currentWorkplace, open, setOpen, work_id_form }} />
-      <WorkForm {...{ currentWorkplace, openWork, setOpenWork, openWorkType, work_id_form }} />
-      
+      <GradeForm
+        {...{ currentWorkplace, open, setOpen, work_id_form, handleOpenToast }}
+      />
+      <WorkForm
+        {...{
+          currentWorkplace,
+          openWork,
+          setOpenWork,
+          openWorkType,
+          work_id_form,
+          handleOpenToast,
+        }}
+      />
+
       <Button
         sx={{ ml: "40%", mt: 1, color: "green" }}
         onClick={() => handleClickOpenWork("CREATE", null)}
       >
         Створити нову роботу
       </Button>
+      <Snackbar
+        open={openToast}
+        autoHideDuration={5000}
+        onClose={handleCloseToast}
+      >
+        <Alert
+          onClose={handleCloseToast}
+          severity={toastSeverity}
+          sx={{ width: "100%" }}
+        >
+          {toastMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
