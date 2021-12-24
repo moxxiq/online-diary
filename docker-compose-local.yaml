@@ -23,6 +23,7 @@ services:
       - FASTAPI_ADMIN_PASSWORD=admin
       - PORT=8000
       - CORS_ORIGINS=http://localhost:8001,https://some.app/
+      - FRONTEND_PATH=https://поставтеєшку-але-можнабільше.укр/
   frontend:
     container_name: react-frontend
     stdin_open: true
