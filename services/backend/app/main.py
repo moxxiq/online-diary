@@ -5,6 +5,7 @@ from app.api.v1.endpoints import all as v1_endpoints
 from app.db import database
 from app.misc.utils import create_admin_if_not_exists
 from app.config import CORS_ORIGINS
+import app.root.index as index
 
 app = FastAPI()
 v1 = FastAPI()
@@ -31,6 +32,7 @@ async def shutdown():
     await database.disconnect()
 
 
+app.include_router(index.router)
 v1.include_router(v1_endpoints)
 
 app.mount("/api/v1", v1)
