@@ -6,15 +6,18 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateTimePicker from "@mui/lab/DateTimePicker";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import {
-  get_workplace,
-  get_students_from_class,
-  createWork
+  get_work_types,
+  createWork,
+  editWork,
+  deleteWork,
 } from "../../../helpers/workplace";
 
 export default function WorkForm({
@@ -23,59 +26,86 @@ export default function WorkForm({
   setOpenWork,
   openWorkType,
   work_id_form,
+  handleOpenToast,
 }) {
-  const [student_id, setStudent] = useState(null);
-  const [mark, setMark] = useState(null);
-  const [comment, setComment] = useState("");
-  
+  //   const [open, setOpen] = React.useState(false);
+  const [work_types, setWorkTypes] = useState([]);
+  const [work_type_id, setWorkTypeId] = useState(1);
   const [headline, setHeadline] = useState("Назва роботи");
-  const [deadline, setDeadline] = useState(null);
-  const [work_type_id, setWorkTypeId] = useState(0);
+  const [deadline, setDeadline] = useState(new Date());
   const [description, setDescription] = useState("Опис роботи");
 
-  const [students, setStudents] = useState([]);
-
   const request_data = () => ({
-    work_type_id: work_id_form,
-    student_id,
-    mark,
-    comment,
+    headline,
+    deadline,
+    description,
+    work_type_id,
+    workplace_id: currentWorkplace
   });
 
-  const handleStudent = (event) => {
-    setStudent(Number(event.target.value) || "");
+  const handleWorkType = (event) => {
+    setWorkTypeId(Number(event.target.value) || "");
   };
 
-  const handleMark = (event) => {
-    setMark(Number(event.target.value) || "");
+  const handleDeadline = (event) => {
+    setDeadline(Date(event.target.value) || "");
   };
 
-  const handleComment = (event) => {
-    setComment(String(event.target.value) || "");
+  const handleHeadline = (event) => {
+    setHeadline(String(event.target.value) || "");
+  };
+
+  const handleDescription = (event) => {
+    setDescription(String(event.target.value) || "");
   };
 
   useEffect(() => {
-    get_workplace(currentWorkplace).then((res) => {
-      get_students_from_class(res.class_id).then(setStudents);
-    });
+    get_work_types().then(setWorkTypes);
   }, [openWork, currentWorkplace]);
 
   const handleClose = (event, reason) => {
-    console.log({ student_id, mark, comment, students });
+    console.log({ work_types, openWorkType, work_id_form, ...request_data() });
 
     if (reason === "submit") {
-      // postData(request_data()).then((res) => console.log(res));
-      // request_data
+      switch (openWorkType) {
+        case "CREATE":
+          createWork(request_data())
+            .then((res) => {
+              console.log(res);
+              handleOpenToast("WORK_OK");
+            })
+            .catch((err) => {
+              console.log({ err });
+              handleOpenToast("ERROR");
+            });
+          break;
+        case "EDIT":
+          editWork({ work_id_form, data: request_data() })
+            .then((res) => {
+              console.log(res);
+              handleOpenToast("WORK_OK");
+            })
+            .catch((err) => {
+              console.log({ err });
+              handleOpenToast("ERROR");
+            });
+          break;
+      }
+
+      setOpenWork(false);
     }
 
     if (reason !== "backdropClick") {
       setOpenWork(false);
+      handleOpenToast("CLOSE_FORM")
     }
   };
 
   return (
     <Dialog disableEscapeKeyDown open={openWork} onClose={handleClose}>
-      <DialogTitle>Створити роботу</DialogTitle>
+      <DialogTitle>
+        {openWorkType === "EDIT" ? "Змінити опис" : "Створити роботу"}
+      </DialogTitle>
       <DialogContent>
         <Box
           component="form"
@@ -86,14 +116,14 @@ export default function WorkForm({
           }}
         >
           <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel htmlFor="demo-dialog-native">Студент</InputLabel>
-            <Select value={student_id || ""} onChange={handleStudent}>
-              {students.length ? (
-                students.map((stud) => (
+            <InputLabel htmlFor="demo-dialog-native">Тип роботи</InputLabel>
+            <Select value={work_type_id} onChange={handleWorkType}>
+              {work_types.length ? (
+                work_types.map((w_type) => (
                   <MenuItem
-                    key={stud.id}
-                    value={stud.id}
-                  >{`${stud.surname} ${stud.name}`}</MenuItem>
+                    key={w_type.id}
+                    value={w_type.id}
+                  >{`${w_type.name}`}</MenuItem>
                 ))
               ) : (
                 <></>
@@ -101,23 +131,35 @@ export default function WorkForm({
             </Select>
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                renderInput={(props) => <TextField {...props} />}
+                label="Дедлайн"
+                value={deadline}
+                onChange={(newValue) => {
+                  setDeadline(newValue);
+                }}
+              />
+            </LocalizationProvider>
+          </FormControl>
+          <FormControl sx={{ m: 1, minWidth: 120, alignSelf: "flex-end" }}>
             <TextField
-              type="text"
-              id="gradeField"
-              value={mark || ""}
-              onChange={handleMark}
-              label="Оцінка"
-              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              id="headlineField"
+              onChange={handleHeadline}
+              value={headline}
+              fullWidth
+              label="Назва роботи"
+              inputProps={{ inputMode: "text", maxLength: 30 }}
             />
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 120, alignSelf: "flex-end" }}>
             <TextField
-              id="commentField"
-              onChange={handleComment}
-              value={comment || ""}
+              id="descriptionField"
+              onChange={handleDescription}
+              value={description}
               fullWidth
-              label="Коментар"
-              inputProps={{inputMode: "text", maxLength: 50}}
+              label="Опис роботи"
+              inputProps={{ inputMode: "text", maxLength: 80 }}
             />
           </FormControl>
         </Box>

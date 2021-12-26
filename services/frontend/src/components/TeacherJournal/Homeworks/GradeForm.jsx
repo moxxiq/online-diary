@@ -15,6 +15,8 @@ import {
   get_workplace,
   get_students_from_class,
   editMark,
+  createMark,
+  getMarkId,
 } from "../../../helpers/workplace";
 
 export default function GradeForm({
@@ -22,6 +24,7 @@ export default function GradeForm({
   open,
   setOpen,
   work_id_form,
+  handleOpenToast,
 }) {
   //   const [open, setOpen] = React.useState(false);
   const [student_id, setStudent] = useState(null);
@@ -59,12 +62,36 @@ export default function GradeForm({
     console.log({ student_id, mark, comment, students });
 
     if (reason === "submit") {
-      editMark(request_data()).then((res) => console.log(res));
-      // request_data
+      getMarkId({ work_id: work_id_form, student_id }).then((id) => {
+        if (id === -1) {
+          createMark(request_data())
+            .then((res) => {
+              console.log(res);
+              handleOpenToast("MARK_OK");
+            })
+            .catch((err) => {
+              console.log({ err });
+              handleOpenToast("ERROR");
+            });
+        } else {
+          editMark({ id, data: request_data() })
+            .then((res) => {
+              console.log(res);
+              handleOpenToast("MARK_OK");
+            })
+            .catch((err) => {
+              console.log({ err });
+              handleOpenToast("ERROR");
+            });
+        }
+      });
+
+      setOpen(false);
     }
 
     if (reason !== "backdropClick") {
       setOpen(false);
+      handleOpenToast("CLOSE_FORM");
     }
   };
 
