@@ -42,7 +42,7 @@ function Journal({ profile, currentWorkplace }) {
           <TableRow>
             <TableCell colSpan={1}></TableCell>
             {works.map((work) => (
-              <TableCell key={work.id} align="right">
+              <TableCell key={`w${work.id}`} align="right">
                 {work.headline}
               </TableCell>
             ))}
@@ -51,18 +51,16 @@ function Journal({ profile, currentWorkplace }) {
         <TableBody>
           {students.map((student) => (
             <TableRow
-              key={student.id}
+              key={`s${student.id}`}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
                 {profile_fullname(student)}
               </TableCell>
               {works.map((work) => (
-                <TableCell align="right">
-                  {
-                    work.marks?.find((mark) => mark.student_id === student.id)
-                      ?.mark || '-'
-                  }
+                <TableCell key={`${work.id}${student.id}`} align="right">
+                  {work.marks?.find((mark) => mark.student_id === student.id)
+                    ?.mark || "-"}
                 </TableCell>
               ))}
               {/* <TableCell align="right">{row.carbs}</TableCell> */}

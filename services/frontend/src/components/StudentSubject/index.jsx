@@ -16,6 +16,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { get_works_student, get_work_types } from "../../helpers/workplace";
 import { parse_date } from "../../helpers/other";
 import { connect } from "react-redux";
+import { Container, Box } from "@mui/material";
 
 function StudentSubject({ profile, currentWorkplace }) {
   const [expanded, setExpanded] = React.useState(false);
@@ -39,86 +40,90 @@ function StudentSubject({ profile, currentWorkplace }) {
   };
 
   return (
-    <div>
+    <Container>
       {Array.isArray(works) ? (
         works.map((work) => (
-          <Accordion
-            expanded={expanded === work.id}
-            onChange={handleChange(work.id)}
-            key={work.id}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={`panel${work.id}bh-content`}
-              id={`panel${work.id}bh-header`}
+          <Box key={work.id} sx={{ display: "flex", p: 1, width: "lg" }}>
+            <Accordion
+              sx={{ flex: 1.6 }}
+              expanded={expanded === work.id}
+              onChange={handleChange(work.id)}
             >
-              <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                {work.headline}
-              </Typography>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={`panel${work.id}bh-content`}
+                id={`panel${work.id}bh-header`}
+              >
+                <Typography sx={{ width: "33%", flexShrink: 0 }}>
+                  {work.headline}
+                </Typography>
+                <Typography sx={{ color: "text.secondary" }}>
+                  {work.description}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <List
+                  sx={{
+                    width: "100%",
+                    maxWidth: 360,
+                    bgcolor: "background.paper",
+                  }}
+                >
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <BorderAllIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary="Вид роботи"
+                      secondary={work_types[work.work_type_id]}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <SportsScoreIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary="Створено -- Дедлайн"
+                      secondary={`${parse_date(
+                        work.creation_date
+                      )} -- ${parse_date(work.deadline)}`}
+                    />
+                  </ListItem>
+                  {work.marks.length ? (
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <GradeIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={parse_date(work.marks[0].creation_date)}
+                        secondary={`Коментар: ${work.marks[0].comment}`}
+                      />
+                    </ListItem>
+                  ) : (
+                    ""
+                  )}
+                </List>
+              </AccordionDetails>
+            </Accordion>
+            <Box sx={{ m: 2, flex: 0.2, minWidth: "200px" }}>
               <Typography sx={{ color: "text.secondary" }}>
-                {work.description}
-              </Typography>
-              <Typography sx={{ color: "text.secondary", ml: "150px" }}>
                 {work.marks.length
                   ? `Оцінка: ${work.marks[0].mark}`
                   : "Не виставлено"}
               </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <List
-                sx={{
-                  width: "100%",
-                  maxWidth: 360,
-                  bgcolor: "background.paper",
-                }}
-              >
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <BorderAllIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary="Вид роботи"
-                    secondary={work_types[work.work_type_id]}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <SportsScoreIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary="Створено -- Дедлайн"
-                    secondary={`${parse_date(
-                      work.creation_date
-                    )} -- ${parse_date(work.deadline)}`}
-                  />
-                </ListItem>
-                {work.marks.length ? (
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <GradeIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={parse_date(work.marks[0].creation_date)}
-                      secondary={`Коментар: ${work.marks[0].comment}`}
-                    />
-                  </ListItem>
-                ) : (
-                  ""
-                )}
-              </List>
-            </AccordionDetails>
-          </Accordion>
+            </Box>
+          </Box>
         ))
       ) : (
         <>{typeof works}</>
       )}
-    </div>
+    </Container>
   );
 }
 

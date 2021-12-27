@@ -23,9 +23,9 @@ function ProfilePage({ profile }) {
           </Grid>
           <Grid item xs={8} sx={{pb:2}}>
             {profile?.type === 2 ? (
-              <ClassesList profile={profile} />
+              <ClassesList />
             ) : (
-              <SubjectsList profile={profile} />
+              <SubjectsList />
             )}
           </Grid>
         </Grid>

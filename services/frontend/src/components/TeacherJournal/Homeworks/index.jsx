@@ -113,12 +113,11 @@ function Homeworks({ profile, currentWorkplace }) {
     <Container>
       {Array.isArray(works) ? (
         works.map((work) => (
-          <Box sx={{ display: "flex", p: 1, width: "lg" }}>
+          <Box key={work.id} sx={{ display: "flex", p: 1, width: "lg" }}>
             <Accordion
               sx={{ flex: 1.6 }}
               expanded={expanded === work.id}
               onChange={handleChange(work.id)}
-              key={work.id}
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
