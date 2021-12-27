@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -14,6 +15,8 @@ import MuiAlert from "@mui/material/Alert";
 import SportsScoreIcon from "@mui/icons-material/SportsScore";
 import BorderAllIcon from "@mui/icons-material/BorderAll";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import { connect } from "react-redux";
 
 import GradeForm from "./GradeForm";
@@ -21,6 +24,7 @@ import WorkForm from "./WorkForm";
 
 import { get_works_teacher, get_work_types } from "../../../helpers/workplace";
 import { parse_date } from "../../../helpers/other";
+import { Container, Box } from "@mui/material";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -50,12 +54,10 @@ function Homeworks({ profile, currentWorkplace }) {
       setWorkTypes(result_types);
     });
     get_works_teacher(currentWorkplace).then(setWorks);
-    setTimeout(console.log({ works, work_types }), 3000);
   }, [currentWorkplace, openWork]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
-    setTimeout(console.log({ works, work_types }), 1000);
   };
 
   const handleClickOpen = (work_id) => {
@@ -79,6 +81,14 @@ function Homeworks({ profile, currentWorkplace }) {
         setToastSeverity("success");
         setToastMessage("Робота створена успішно!");
         break;
+      case "WORK_EDIT":
+        setToastSeverity("success");
+        setToastMessage("Робота успішно оновлена!");
+        break;
+      case "WORK_DELETE":
+        setToastSeverity("warning");
+        setToastMessage("Робота успішно видалена!");
+        break;
       case "ERROR":
         setToastSeverity("error");
         setToastMessage("Помилка запиту!");
@@ -100,73 +110,96 @@ function Homeworks({ profile, currentWorkplace }) {
   };
 
   return (
-    <div>
+    <Container>
       {Array.isArray(works) ? (
         works.map((work) => (
-          <Accordion
-            expanded={expanded === work.id}
-            onChange={handleChange(work.id)}
-            key={work.id}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={`panel${work.id}bh-content`}
-              id={`panel${work.id}bh-header`}
+          <Box sx={{ display: "flex", p: 1, width: "lg" }}>
+            <Accordion
+              sx={{ flex: 1.6 }}
+              expanded={expanded === work.id}
+              onChange={handleChange(work.id)}
+              key={work.id}
             >
-              <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                {work.headline}
-              </Typography>
-              <Typography sx={{ color: "text.secondary", ml: "250px" }}>
-                {`Дедлайн: ${parse_date(work.deadline)}`}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <List
-                sx={{
-                  width: "100%",
-                  maxWidth: 360,
-                  bgcolor: "background.paper",
-                }}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={`panel${work.id}bh-content`}
+                id={`panel${work.id}bh-header`}
               >
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <BorderAllIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={work_types[work.work_type_id]}
-                    secondary={`Опис: ${work.description}`}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <SportsScoreIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary="Створено -- Дедлайн"
-                    secondary={`${parse_date(
-                      work.creation_date
-                    )} -- ${parse_date(work.deadline)}`}
-                  />
-                </ListItem>
-                <ListItem>
-                  <Button
-                    variant="text"
-                    onClick={() => handleClickOpen(work.id)}
-                  >
-                    Виставити оцінку
-                  </Button>
-                </ListItem>
-              </List>
-            </AccordionDetails>
-          </Accordion>
+                <Typography sx={{ width: "33%", flexShrink: 0 }}>
+                  {work.headline}
+                </Typography>
+                <Typography sx={{ color: "text.secondary", ml: "250px" }}>
+                  {`Дедлайн: ${parse_date(work.deadline)}`}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <List
+                  sx={{
+                    width: "100%",
+                    maxWidth: 360,
+                    bgcolor: "background.paper",
+                  }}
+                >
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <BorderAllIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={work_types[work.work_type_id]}
+                      secondary={`Опис: ${work.description}`}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <SportsScoreIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary="Створено -- Дедлайн"
+                      secondary={`${parse_date(
+                        work.creation_date
+                      )} -- ${parse_date(work.deadline)}`}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <Button
+                      variant="text"
+                      onClick={() => handleClickOpen(work.id)}
+                    >
+                      Виставити оцінку
+                    </Button>
+                  </ListItem>
+                </List>
+              </AccordionDetails>
+            </Accordion>
+            <Box sx={{ ml: 2, flex: 0.1 }}>
+              <IconButton
+                sx={{ mb: 0.5, color: "green", border: 1, borderRadius: "50%" }}
+                onClick={() => handleClickOpenWork("EDIT", work.id)}
+              >
+                <EditRoundedIcon />
+              </IconButton>
+              <IconButton
+                sx={{ mt: 0.5, color: "red", border: 1, borderRadius: "50%" }}
+                onClick={() => handleClickOpenWork("DELETE", work.id)}
+              >
+                <DeleteForeverRoundedIcon />
+              </IconButton>
+            </Box>
+          </Box>
         ))
       ) : (
         <>{typeof works}</>
       )}
+      <Button
+        sx={{ mt: 1, color: "green" }}
+        onClick={() => handleClickOpenWork("CREATE", null)}
+      >
+        Створити нову роботу
+      </Button>
       <GradeForm
         {...{ currentWorkplace, open, setOpen, work_id_form, handleOpenToast }}
       />
@@ -180,13 +213,6 @@ function Homeworks({ profile, currentWorkplace }) {
           handleOpenToast,
         }}
       />
-
-      <Button
-        sx={{ ml: "40%", mt: 1, color: "green" }}
-        onClick={() => handleClickOpenWork("CREATE", null)}
-      >
-        Створити нову роботу
-      </Button>
       <Snackbar
         open={openToast}
         autoHideDuration={5000}
@@ -200,7 +226,7 @@ function Homeworks({ profile, currentWorkplace }) {
           {toastMessage}
         </Alert>
       </Snackbar>
-    </div>
+    </Container>
   );
 }
 

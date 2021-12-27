@@ -18,6 +18,7 @@ import {
   createWork,
   editWork,
   deleteWork,
+  getWork,
 } from "../../../helpers/workplace";
 
 export default function WorkForm({
@@ -40,7 +41,7 @@ export default function WorkForm({
     deadline,
     description,
     work_type_id,
-    workplace_id: currentWorkplace
+    workplace_id: currentWorkplace,
   });
 
   const handleWorkType = (event) => {
@@ -63,8 +64,18 @@ export default function WorkForm({
     get_work_types().then(setWorkTypes);
   }, [openWork, currentWorkplace]);
 
-  const handleClose = (event, reason) => {
-    console.log({ work_types, openWorkType, work_id_form, ...request_data() });
+  useEffect(() => {
+    openWorkType === "EDIT" &&
+      getWork(work_id_form).then((work_data) => {
+        work_data.headline && setHeadline(work_data.headline);
+        work_data.deadline && setDeadline(work_data.deadline);
+        work_data.description && setDescription(work_data.description);
+        work_data.work_type_id && setWorkTypeId(work_data.work_type_id);
+      });
+  }, [work_id_form]);
+
+  const handleClose = (event, reason, edit) => {
+    // console.log({ work_types, openWorkType, work_id_form, ...request_data() });
 
     if (reason === "submit") {
       switch (openWorkType) {
@@ -80,10 +91,21 @@ export default function WorkForm({
             });
           break;
         case "EDIT":
-          editWork({ work_id_form, data: request_data() })
+          editWork({ id: work_id_form, data: request_data() })
             .then((res) => {
               console.log(res);
-              handleOpenToast("WORK_OK");
+              handleOpenToast("WORK_EDIT");
+            })
+            .catch((err) => {
+              console.log({ err });
+              handleOpenToast("ERROR");
+            });
+          break;
+        case "DELETE":
+          deleteWork(work_id_form)
+            .then((res) => {
+              console.log(res);
+              handleOpenToast("WORK_DELETE");
             })
             .catch((err) => {
               console.log({ err });
@@ -97,76 +119,94 @@ export default function WorkForm({
 
     if (reason !== "backdropClick") {
       setOpenWork(false);
-      handleOpenToast("CLOSE_FORM")
+      handleOpenToast("CLOSE_FORM");
     }
   };
 
   return (
     <Dialog disableEscapeKeyDown open={openWork} onClose={handleClose}>
       <DialogTitle>
-        {openWorkType === "EDIT" ? "Змінити опис" : "Створити роботу"}
+        {(openWorkType === "EDIT" && "Змінити опис") ||
+          (openWorkType === "CREATE" && "Створити роботу") ||
+          (openWorkType === "DELETE" && "Видалити роботу")}
       </DialogTitle>
       <DialogContent>
-        <Box
-          component="form"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 1,
-          }}
-        >
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel htmlFor="demo-dialog-native">Тип роботи</InputLabel>
-            <Select value={work_type_id} onChange={handleWorkType}>
-              {work_types.length ? (
-                work_types.map((w_type) => (
-                  <MenuItem
-                    key={w_type.id}
-                    value={w_type.id}
-                  >{`${w_type.name}`}</MenuItem>
-                ))
-              ) : (
-                <></>
-              )}
-            </Select>
-          </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                renderInput={(props) => <TextField {...props} />}
-                label="Дедлайн"
-                value={deadline}
-                onChange={(newValue) => {
-                  setDeadline(newValue);
-                }}
+        {openWorkType !== "DELETE" && (
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+            }}
+          >
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel htmlFor="demo-dialog-native">Тип роботи</InputLabel>
+              <Select value={work_type_id} onChange={handleWorkType}>
+                {work_types.length ? (
+                  work_types.map((w_type) => (
+                    <MenuItem
+                      key={w_type.id}
+                      value={w_type.id}
+                    >{`${w_type.name}`}</MenuItem>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DateTimePicker
+                  renderInput={(props) => <TextField {...props} />}
+                  label="Дедлайн"
+                  value={deadline}
+                  onChange={(newValue) => {
+                    setDeadline(newValue);
+                  }}
+                />
+              </LocalizationProvider>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120, alignSelf: "flex-end" }}>
+              <TextField
+                id="headlineField"
+                onChange={handleHeadline}
+                value={headline}
+                fullWidth
+                label="Назва роботи"
+                inputProps={{ inputMode: "text", maxLength: 30 }}
               />
-            </LocalizationProvider>
-          </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 120, alignSelf: "flex-end" }}>
-            <TextField
-              id="headlineField"
-              onChange={handleHeadline}
-              value={headline}
-              fullWidth
-              label="Назва роботи"
-              inputProps={{ inputMode: "text", maxLength: 30 }}
-            />
-          </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 120, alignSelf: "flex-end" }}>
-            <TextField
-              id="descriptionField"
-              onChange={handleDescription}
-              value={description}
-              fullWidth
-              label="Опис роботи"
-              inputProps={{ inputMode: "text", maxLength: 80 }}
-            />
-          </FormControl>
-        </Box>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120, alignSelf: "flex-end" }}>
+              <TextField
+                id="descriptionField"
+                onChange={handleDescription}
+                value={description}
+                fullWidth
+                label="Опис роботи"
+                inputProps={{ inputMode: "text", maxLength: 80 }}
+              />
+            </FormControl>
+          </Box>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Відмінити</Button>
-        <Button onClick={(e) => handleClose(e, "submit")}>Виставити</Button>
+        {openWorkType !== "DELETE" ? (
+          <Button
+            sx={{ color: "green" }}
+            onClick={(e) => handleClose(e, "submit")}
+          >
+            Зберегти
+          </Button>
+        ) : (
+          <Button
+            sx={{ color: "red" }}
+            onClick={(e) => handleClose(e, "submit")}
+          >
+            Видалити
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

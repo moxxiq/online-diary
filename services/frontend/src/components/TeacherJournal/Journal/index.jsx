@@ -1,50 +1,72 @@
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import React, { useEffect, useState } from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { connect } from "react-redux";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
+import {
+  get_works_teacher,
+  get_workplace,
+  get_students_from_class,
+} from "../../../helpers/workplace";
+import { profile_fullname } from "../../../helpers/profile";
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+import { parse_date } from "../../../helpers/other";
 
-export default function Journal() {
+function Journal({ profile, currentWorkplace }) {
+  const [works, setWorks] = useState([]);
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    get_works_teacher(currentWorkplace).then(setWorks);
+    get_workplace(currentWorkplace).then((res) => {
+      get_students_from_class(res.class_id).then(setStudents);
+    });
+    // setTimeout(console.log({ works, students }), 3000);
+  }, [currentWorkplace]);
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell colSpan={1}>Студенти</TableCell>
+            <TableCell colSpan={works.length} align="center">
+              Роботи
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={1}></TableCell>
+            {works.map((work) => (
+              <TableCell key={work.id} align="right">
+                {work.headline}
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {students.map((student) => (
             <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              key={student.id}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {profile_fullname(student)}
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+              {works.map((work) => (
+                <TableCell align="right">
+                  {
+                    work.marks?.find((mark) => mark.student_id === student.id)
+                      ?.mark || '-'
+                  }
+                </TableCell>
+              ))}
+              {/* <TableCell align="right">{row.carbs}</TableCell> */}
+              {/* <TableCell align="right">{row.protein}</TableCell> */}
             </TableRow>
           ))}
         </TableBody>
@@ -52,3 +74,12 @@ export default function Journal() {
     </TableContainer>
   );
 }
+
+const mapStateToProps = (rootState) => ({
+  profile: rootState?.profile,
+  currentWorkplace: rootState?.currentWorkplace,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Journal);

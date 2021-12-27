@@ -21,7 +21,7 @@ function ProfilePage({ profile }) {
           <Grid item xs={4}>
             <ProfileCard profile={profile} />
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={8} sx={{pb:2}}>
             {profile?.type === 2 ? (
               <ClassesList profile={profile} />
             ) : (

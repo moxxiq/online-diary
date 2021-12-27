@@ -1,9 +1,14 @@
-import { getAccessTokenFromCookie } from './auth'
+import { getAccessTokenFromCookie } from "./auth";
+
 export const profile_fullname = (profile, short = false) => {
   if (short) {
-    return `${profile.surname} ${profile.name[0]}. ${profile.midname[0]}.`;
+    return `${profile.surname} ${profile.name[0]}. ${
+      profile.midname && profile.midname[0]
+    }.`;
   }
-  return `${profile.surname} ${profile.name} ${profile.midname}`;
+  return `${profile.surname} ${profile.name} ${
+    profile.midname && profile.midname
+  }`;
 };
 
 export const type_to_str = (n) => {
@@ -29,7 +34,7 @@ export const get_student_workplaces = async (user_id) => {
       },
     }
   );
-  return result.json()
+  return result.json();
 };
 
 export const get_teacher_workplaces = async (user_id) => {
@@ -42,5 +47,5 @@ export const get_teacher_workplaces = async (user_id) => {
       },
     }
   );
-  return result.json()
+  return result.json();
 };

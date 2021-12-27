@@ -59,7 +59,7 @@ export default function GradeForm({
   }, [open, currentWorkplace]);
 
   const handleClose = (event, reason) => {
-    console.log({ student_id, mark, comment, students });
+    // console.log({ student_id, mark, comment, students });
 
     if (reason === "submit") {
       getMarkId({ work_id: work_id_form, student_id }).then((id) => {
