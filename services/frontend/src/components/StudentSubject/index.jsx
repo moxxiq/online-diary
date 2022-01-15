@@ -17,6 +17,13 @@ import { get_works_student, get_work_types } from "../../helpers/workplace";
 import { parse_date } from "../../helpers/other";
 import { connect } from "react-redux";
 import { Container, Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const MarkDiv = styled("div")(({ theme }) => ({
+  ...theme.typography.button,
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(1),
+}));
 
 function StudentSubject({ profile, currentWorkplace }) {
   const [expanded, setExpanded] = React.useState(false);
@@ -123,6 +130,14 @@ function StudentSubject({ profile, currentWorkplace }) {
       ) : (
         <>{typeof works}</>
       )}
+
+      <MarkDiv>
+        {`Ваша загальна оцінка становить: ${
+          works.length
+            ? works.reduce((result, w) => result + (w.marks.length ? w.marks[0].mark : 0), 0)
+            : 0
+        }`}
+      </MarkDiv>
     </Container>
   );
 }

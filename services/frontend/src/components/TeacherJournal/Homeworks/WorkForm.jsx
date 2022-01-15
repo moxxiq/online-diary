@@ -160,6 +160,12 @@ export default function WorkForm({
                 <DateTimePicker
                   renderInput={(props) => <TextField {...props} />}
                   label="Дедлайн"
+                  disablePast
+                  maxDate={
+                    new Date().getMonth() > 5
+                      ? new Date(new Date().getFullYear(), 11, 30, 23)
+                      : new Date(new Date().getFullYear(), 5, 15, 23)
+                  }
                   value={deadline}
                   onChange={(newValue) => {
                     setDeadline(newValue);
