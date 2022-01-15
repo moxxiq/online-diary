@@ -1,3 +1,6 @@
+from typing import Optional
+from datetime import date, datetime
+
 from app.core.schemas.works import Work, WorkContent
 from app.db import database
 from app.core.models.works import works
@@ -37,6 +40,18 @@ async def put(id: int, payload: WorkContent):
 async def delete(id: int):
     query = works.delete().where(id == works.c.id)
     return await database.execute(query=query)
+
+async def get_work_workplace_name_date(workplace_id: int, headline: str, deadline: Optional[datetime]):
+    query = (
+        works
+            .select()
+            .where(
+                (workplace_id == works.c.workplace_id)
+                & (headline == works.c.headline)
+                & (deadline.date() == sa.cast(works.c.deadline, sa.Date) if deadline else True)
+            )
+    )
+    return await database.fetch_one(query=query)
 
 async def get_all_workplace_works(workplace_id: int):
     query = (
