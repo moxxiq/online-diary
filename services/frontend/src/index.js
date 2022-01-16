@@ -6,6 +6,7 @@ import store from './store';
 import Routing from './containers/Routing';
 import reportWebVitals from './reportWebVitals';
 import ResponsiveAppBar from './components/ResponsiveAppBar'
+import { BASE_URL } from './config'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,6 +17,8 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+console.log({BASE_URL})
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
