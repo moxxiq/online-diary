@@ -1,4 +1,5 @@
 import { getAccessTokenFromCookie } from "./auth";
+import { BASE_URL } from './../config';
 
 export const profile_fullname = (profile, short = false) => {
   if (short) {
@@ -26,7 +27,7 @@ export const type_to_str = (n) => {
 
 export const get_student_workplaces = async (user_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/students/${user_id}/workplaces/detailed`,
+    `${BASE_URL}/api/v1/students/${user_id}/workplaces/detailed`,
     {
       method: "GET",
       headers: {
@@ -39,7 +40,7 @@ export const get_student_workplaces = async (user_id) => {
 
 export const get_teacher_workplaces = async (user_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/teachers/${user_id}/workplaces/detailed`,
+    `${BASE_URL}/api/v1/teachers/${user_id}/workplaces/detailed`,
     {
       method: "GET",
       headers: {

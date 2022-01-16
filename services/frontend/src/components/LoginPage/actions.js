@@ -3,6 +3,8 @@ import {
   getAccessTokenFromCookie,
   eraseCookie,
 } from "../../helpers/auth";
+import { BASE_URL } from './../../config';
+
 
 export const SET_USER = "DIARY:SET_USER";
 export const REMOVE_USER = "DIARY:REMOVE_USER";
@@ -20,7 +22,7 @@ export const setCurrentWorkplace =
 export const loginAction =
   (creds, history) => async (dispatch, getRootState) => {
     const resp = await fetch(
-      "https://online-diary-mathape.herokuapp.com/api/v1/auth/token",
+      `${BASE_URL}/api/v1/auth/token`,
       {
         method: "POST",
         headers: {
@@ -48,7 +50,7 @@ export const loadUserProfile = (history) => async (dispatch, _getRootState) => {
   }
 
   const resp = await fetch(
-    "https://online-diary-mathape.herokuapp.com/api/v1/users/me",
+    `${BASE_URL}/api/v1/users/me`,
     {
       method: "GET",
       headers: {
