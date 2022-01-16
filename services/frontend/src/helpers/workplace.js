@@ -1,4 +1,5 @@
 import { getAccessTokenFromCookie } from "./auth";
+import { BASE_URL } from './../config'
 
 export const get_classname = ({ class_name, class_number }) => {
   const currentTime = new Date();
@@ -19,7 +20,7 @@ export const get_workplace_str = (workplace) => {
 
 export const get_works = async (workplace_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/workplaces/${workplace_id}/works`,
+    `${BASE_URL}/api/v1/workplaces/${workplace_id}/works`,
     {
       method: "GET",
       headers: {
@@ -32,7 +33,7 @@ export const get_works = async (workplace_id) => {
 
 export const get_mark = async (work_id, student_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/works/${work_id}/students/${student_id}/marks`,
+    `${BASE_URL}/api/v1/works/${work_id}/students/${student_id}/marks`,
     {
       method: "GET",
       headers: {
@@ -45,7 +46,7 @@ export const get_mark = async (work_id, student_id) => {
 
 export const get_work_types = async () => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/work_types`,
+    `${BASE_URL}/api/v1/work_types`,
     {
       method: "GET",
       headers: {
@@ -58,7 +59,7 @@ export const get_work_types = async () => {
 
 export const get_works_student = async (workplace_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/workplace/${workplace_id}/diary/works`,
+    `${BASE_URL}/api/v1/workplace/${workplace_id}/diary/works`,
     {
       method: "GET",
       headers: {
@@ -71,7 +72,7 @@ export const get_works_student = async (workplace_id) => {
 
 export const get_works_teacher = async (workplace_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/workplace/${workplace_id}/journal/works`,
+    `${BASE_URL}/api/v1/workplace/${workplace_id}/journal/works`,
     {
       method: "GET",
       headers: {
@@ -84,7 +85,7 @@ export const get_works_teacher = async (workplace_id) => {
 
 export const get_workplace = async (workplace_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/workplaces/${workplace_id}`,
+    `${BASE_URL}/api/v1/workplaces/${workplace_id}`,
     {
       method: "GET",
       headers: {
@@ -97,7 +98,7 @@ export const get_workplace = async (workplace_id) => {
 
 export const get_students_from_class = async (class_id) => {
   const result = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/classes/${class_id}/students`,
+    `${BASE_URL}/api/v1/classes/${class_id}/students`,
     {
       method: "GET",
       headers: {
@@ -118,7 +119,7 @@ export const get_mark_str = (mark) => {
 export const getMarkId = async ({ work_id, student_id }) => {
   // Default options are marked with *
   const response = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/works/${work_id}/students/${student_id}/marks`,
+    `${BASE_URL}/api/v1/works/${work_id}/students/${student_id}/marks`,
     {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -138,7 +139,7 @@ export const getMarkId = async ({ work_id, student_id }) => {
 export const createMark = async (data = {}) => {
   // Default options are marked with *
   const response = await fetch(
-    "https://online-diary-mathape.herokuapp.com/api/v1/marks",
+    `${BASE_URL}/api/v1/marks`,
     {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -156,7 +157,7 @@ export const editMark = async ({ id, data }) => {
   // Default options are marked with *
   console.log({ id, data });
   const response = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/marks/${id}`,
+    `${BASE_URL}/api/v1/marks/${id}`,
     {
       method: "PUT", // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -173,7 +174,7 @@ export const editMark = async ({ id, data }) => {
 export const createWork = async (data = {}) => {
   // Default options are marked with *
   const response = await fetch(
-    "https://online-diary-mathape.herokuapp.com/api/v1/works",
+    `${BASE_URL}/api/v1/works`,
     {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -190,7 +191,7 @@ export const createWork = async (data = {}) => {
 export const editWork = async ({ id, data }) => {
   // Default options are marked with *
   const response = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/works/${id}`,
+    `${BASE_URL}/api/v1/works/${id}`,
     {
       method: "PUT", // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -207,7 +208,7 @@ export const editWork = async ({ id, data }) => {
 export const deleteWork = async (id) => {
   // Default options are marked with *
   const response = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/works/${id}`,
+    `${BASE_URL}/api/v1/works/${id}`,
     {
       method: "DELETE", // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -224,7 +225,7 @@ export const deleteWork = async (id) => {
 export const getWork = async (id) => {
   // Default options are marked with *
   const response = await fetch(
-    `https://online-diary-mathape.herokuapp.com/api/v1/works/${id}`,
+    `${BASE_URL}/api/v1/works/${id}`,
     {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       headers: {
